@@ -155,6 +155,22 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
+/* ---------- Método ---------- */
+.method { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.method-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; background: var(--soft); border-radius: 999px; }
+.method-tab { border: 0; background: transparent; border-radius: 999px; padding: 9px 12px; color: var(--muted); display: flex; flex-direction: column; align-items: center; line-height: 1.2; gap: 2px; }
+.method-tab small { font-size: 0.74rem; font-weight: 400; }
+.method-tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.drop.fast { border-style: solid; border-color: var(--line); gap: 16px; }
+.fast-steps { margin: 0; padding: 0; list-style: none; counter-reset: f; display: flex; flex-direction: column; gap: 14px; width: 100%; }
+.fast-steps li { counter-increment: f; position: relative; padding-left: 40px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.fast-steps li::before { content: counter(f); position: absolute; left: 0; top: -2px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 0.82rem; font-weight: 600; background: color-mix(in srgb, var(--blue) 12%, var(--surface)); color: var(--blue); }
+.bm { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--hot)); color: #fff; font-weight: 600; text-decoration: none; cursor: grab; box-shadow: var(--shadow); }
+.bm:active { cursor: grabbing; }
+kbd { font-family: var(--mono); font-size: 0.78em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; background: var(--surface); }
+.fine { font-size: 0.8rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; }
+.notice-mini { font-size: 0.88rem; color: var(--hot); }
+
 /* ---------- Responsive ---------- */
 .intro, .res-side, .res-main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 .intro { gap: 32px; }
@@ -210,10 +226,28 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
   <header class="hero">
     <span class="eyebrow"><i></i>Gratis · Sin contraseña · Privado</span>
     <h1>¿Quién no me <em>sigue</em>?</h1>
-    <p class="lead">Sube la exportación de tus datos de Instagram y mira quién no te sigue de vuelta. Sin contraseña. Nada sale de tu navegador.</p>
+    <p class="lead">Descubre en un minuto quién no te devuelve el follow y quién te ha dejado de seguir. Sin contraseña. Nada sale de tu navegador.</p>
   </header>
 
-  <section class="drop" id="drop" aria-labelledby="drop-title">
+  <div class="method">
+  <div class="method-tabs" role="tablist" aria-label="Cómo quieres analizar tu cuenta">
+    <button type="button" class="method-tab" role="tab" data-method="fast" aria-selected="true">⚡ Rápido <small>1 minuto</small></button>
+    <button type="button" class="method-tab" role="tab" data-method="file" aria-selected="false">Con archivo <small>100% seguro</small></button>
+  </div>
+  <section class="drop fast" id="panel-fast" aria-labelledby="fast-title">
+    <h2 id="fast-title">Analiza tu cuenta al momento</h2>
+    <p class="notice-mini" id="fast-mobile" hidden>El modo rápido funciona en ordenador. En el móvil usa la opción «Con archivo».</p>
+    <ol class="fast-steps">
+      <li><span>Arrastra este botón a tu barra de marcadores:</span>
+        <a class="bm" id="bm-link" href="#" draggable="true">⚡ ¿Quién no me sigue?</a>
+        <small class="muted" id="bm-hint">¿No ves la barra? Pulsa <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>B</kbd> en Mac o <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>B</kbd> en Windows. <button type="button" class="link" id="bm-copy">Copiar código</button></small>
+      </li>
+      <li><span>Abre <a href="https://www.instagram.com/" target="_blank" rel="noopener">instagram.com</a> con tu sesión iniciada y pulsa el marcador.</span></li>
+      <li><span>Cuando termine, pulsa <b>Ver resultados</b> y aparecerán aquí.</span></li>
+    </ol>
+    <p class="fine">Usa tu propia sesión: no pedimos tu contraseña y solo lee las listas, nunca sigue ni deja de seguir a nadie. Va despacio para no saturar, pero Instagram no permite oficialmente estas herramientas y podría limitar temporalmente tu cuenta. Si prefieres cero riesgo, usa la opción con archivo.</p>
+  </section>
+  <section class="drop" id="drop" aria-labelledby="drop-title" hidden>
     <span class="drop-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span>
     <h2 id="drop-title">Arrastra aquí tu <code>.zip</code> de Instagram</h2>
     <p class="muted">También valen <code>followers_1.json</code> y <code>following.json</code> sueltos.</p>
@@ -224,10 +258,12 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
     </div>
     <input class="sr" type="file" id="file" multiple accept=".zip,.json,.html,application/zip,application/json,text/html" tabindex="-1" aria-hidden="true">
     <input class="sr" type="file" id="dir" webkitdirectory multiple tabindex="-1" aria-hidden="true">
-    <div class="progress" id="progress" hidden><i></i></div>
-    <p class="status" id="status" role="status">¿Aún no tienes el archivo? <a href="#guia">Mira cómo pedirlo</a>.</p>
-    <label class="opt"><input type="checkbox" id="remember" checked> <span>Recordar en este navegador para avisarte de quién te deja de seguir.</span></label>
+    <p class="muted">¿Aún no tienes el archivo? <a href="#guia">Mira cómo pedirlo</a>, tarda unos minutos.</p>
   </section>
+  <p class="status" id="status" role="status"></p>
+  <div class="progress" id="progress" hidden><i></i></div>
+  <label class="opt"><input type="checkbox" id="remember" checked> <span>Recordar en este navegador para avisarte de quién te deja de seguir.</span></label>
+  </div>
   </div>
 
   <section class="results" id="results" aria-labelledby="res-title">
@@ -236,7 +272,7 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
       <div><span class="eyebrow" id="res-eyebrow">Ejemplo</span><h2 id="res-title">Tus resultados</h2></div>
       <span class="muted" id="res-meta"></span>
     </div>
-    <div class="notice sample" id="sample-note">Estos son datos de ejemplo inventados. Sube tu archivo para ver tus listas reales.</div>
+    <div class="notice sample" id="sample-note">Estos son datos de ejemplo inventados. Analiza tu cuenta arriba para ver tus listas reales.</div>
     <div class="notice history" id="history-note" hidden></div>
     <div class="venn-card">
       <svg class="venn" viewBox="0 0 420 250" role="group" aria-label="Resumen: te siguen, mutuos y no te siguen de vuelta">
@@ -290,9 +326,9 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
   </section>
 
   <section class="card guide" id="guia" aria-labelledby="guide-title">
-    <span class="eyebrow">Paso 1</span>
-    <h2 id="guide-title">Cómo conseguir tu archivo</h2>
-    <p class="tip">Es la forma oficial y segura. Instagram prepara un archivo con tus seguidores y seguidos; suele tardar entre unos minutos y unas horas.</p>
+    <span class="eyebrow">Opción con archivo</span>
+    <h2 id="guide-title">Cómo pedir tu archivo a Instagram</h2>
+    <p class="tip">Es la forma oficial y segura. Instagram prepara un archivo con tus seguidores y seguidos; si eliges solo «Seguidores y seguidos» suele estar listo en pocos minutos.</p>
     <ol>
       <li>Abre Instagram y ve a tu <span class="path">Perfil → menú ☰ → Centro de cuentas</span>.</li>
       <li>Entra en <span class="path">Tu información y permisos → Exportar tu información</span> (en algunas versiones se llama <span class="path">Descargar tu información</span>).</li>
@@ -308,12 +344,16 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
       <p>Instagram no lo indica en sus datos, así que lo calculamos nosotros: cada vez que subes un archivo guardamos un resumen en tu navegador. La próxima vez que subas una exportación nueva, la comparamos con la anterior y te mostramos quién se fue y quién llegó. Repite la exportación cada semana o cada mes.</p>
     </details>
     <details>
+      <summary>¿Qué diferencia hay entre el modo rápido y el archivo?</summary>
+      <p>El modo rápido lee tus listas desde tu propia sesión de instagram.com y tarda un minuto, pero Instagram no permite oficialmente estas herramientas y, si lo usas muchas veces seguidas, podría limitar tu cuenta durante un tiempo. El archivo es la vía oficial de Instagram: cero riesgo, aunque hay que esperar unos minutos a que lo preparen.</p>
+    </details>
+    <details>
       <summary>¿Por qué no pedís mi usuario y contraseña?</summary>
-      <p>Las apps que piden tu contraseña pueden robarte la cuenta, y las que leen Instagram de forma automática hacen que Instagram bloquee o limite tu perfil. Con tu propio archivo no hay ningún riesgo y cumples las normas de Instagram.</p>
+      <p>Porque nunca deberías dársela a nadie. Las apps que la piden pueden robarte la cuenta. Aquí todo pasa en tu navegador, con tu sesión o con tu archivo, y nada llega a ningún servidor.</p>
     </details>
     <details>
       <summary>¿Mis datos se envían a algún sitio?</summary>
-      <p>No. El archivo se lee dentro de tu navegador. No hay servidor ni base de datos. El resumen para comparar se guarda solo en este dispositivo y puedes borrarlo cuando quieras.</p>
+      <p>No. Tanto el archivo como los datos del modo rápido se leen dentro de tu navegador. No hay servidor ni base de datos. El resumen para comparar se guarda solo en este dispositivo y puedes borrarlo cuando quieras.</p>
     </details>
     <details>
       <summary>Me dice que no encuentra los archivos</summary>
@@ -331,13 +371,16 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
   </footer>
 </div>
 
+<script type="text/plain" id="bm-src">
+!function(){var e="__SITE__",a=new URL(e).origin,n="936619743392459";if(window.__qnms)window.__qnms.show();else{if(!/(^|\.)instagram\.com$/.test(location.hostname))return alert("Abre instagram.com, inicia sesión y vuelve a pulsar el marcador «¿Quién no me sigue?»."),void(location.href="https://www.instagram.com/");var o=document.cookie.match(/(?:^|;\s*)ds_user_id=(\d+)/);if(o){var t=o[1],r=document.createElement("div");r.style.cssText="position:fixed;z-index:2147483647;right:20px;bottom:20px;width:340px;max-width:calc(100vw - 40px);background:#fff;color:#12131a;border-radius:18px;box-shadow:0 20px 60px -10px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.06);font:15px/1.5 -apple-system,system-ui,'Segoe UI',sans-serif;padding:20px;";var i="all:unset;cursor:pointer;text-align:center;";r.appendChild(u("div","display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px",{},[u("b","font-size:16px",{},["¿Quién no me ",u("span","color:#f0386b",{},["sigue"]),"?"]),u("button",i+"color:#646a7e;font-size:20px;line-height:1;padding:2px 6px",{"data-x":"","aria-label":"Cerrar"},["×"])])),r.appendChild(u("p","margin:0 0 10px;color:#646a7e",{"data-msg":""},["Preparando…"])),r.appendChild(u("div","height:6px;border-radius:6px;background:#eef0f7;overflow:hidden",{},[u("i","display:block;height:100%;width:2%;background:linear-gradient(90deg,#3b5bfd,#f0386b);transition:width .4s",{"data-bar":""})])),r.appendChild(u("div","display:none;margin-top:14px;flex-direction:column;gap:8px",{"data-done":""},[u("button",i+"background:#12131a;color:#fff;border-radius:999px;padding:11px 16px;font-weight:600",{"data-open":""},["Ver resultados"]),u("button",i+"color:#646a7e;text-decoration:underline;font-size:13px",{"data-save":""},["Descargar archivo (si no se abren)"])])),r.appendChild(u("p","margin:12px 0 0;font-size:12px;color:#9aa0b4",{},["Solo lectura. No sigue ni deja de seguir a nadie. Tus datos no se envían a ningún servidor."])),document.body.appendChild(r);var s=function(e){return r.querySelector("[data-"+e+"]")},d=!1;window.__qnms={show:function(){r.style.display="block"}},s("x").onclick=function(){d=!0,r.remove(),delete window.__qnms};var l=function(e){return new Promise((function(a){setTimeout(a,e)}))},c=null;!async function(){try{var e={};try{var a=await f("/api/v1/users/"+t+"/info/");a&&a.user&&(e.followers=a.user.follower_count,e.following=a.user.following_count,e.username=a.user.username)}catch(e){}var n=await g("following","a quién sigues",50,0,e),o=await g("followers","tus seguidores",50,50,e);m(100);var r={};o.forEach((function(e){r[e.u]=1}));var i=n.filter((function(e){return!r[e.u]})).length;c={qnms:1,source:"rapido",account:e.username||"",date:Date.now(),followers:o,following:n},p("Listo: "+i.toLocaleString("es")+" cuentas no te siguen de vuelta (de "+n.length.toLocaleString("es")+" que sigues)."),s("done").style.display="flex"}catch(e){"stop"!==e.message&&p(e.message)}}(),s("open").onclick=function(){var n=window.open(e+"#recibir","_blank");if(n){var o=!1;window.addEventListener("message",(function e(t){t.origin===a&&t.data&&"qnms-ready"===t.data.type&&!o&&(o=!0,n.postMessage({type:"qnms-data",payload:c},a),p("Resultados enviados. Puedes cerrar este panel."),window.removeEventListener("message",e))})),setTimeout((function(){o||p("No se pudo conectar con la web. Usa «Descargar archivo» y súbelo allí.")}),15e3)}else p("Tu navegador ha bloqueado la ventana. Usa «Descargar archivo» y súbelo en la web.")},s("save").onclick=function(){var e=document.createElement("a");e.href=URL.createObjectURL(new Blob([JSON.stringify(c)],{type:"application/json"})),e.download="quien-no-me-sigue-"+(new Date).toISOString().slice(0,10)+".json",document.body.appendChild(e),e.click(),e.remove(),p("Archivo descargado. Súbelo en la web con «Elegir archivo».")}}else alert("Inicia sesión en instagram.com y vuelve a pulsar el marcador.")}function u(e,a,n,o){var t=document.createElement(e);for(var r in a&&(t.style.cssText=a),n||{})t.setAttribute(r,n[r]);return(o||[]).forEach((function(e){t.appendChild("string"==typeof e?document.createTextNode(e):e)})),t}function p(e){s("msg").textContent=e}function m(e){s("bar").style.width=Math.max(2,Math.min(100,e))+"%"}async function f(e){for(var a=0;a<4;a++){var o=await fetch(e,{credentials:"include",headers:{"x-ig-app-id":n,"x-requested-with":"XMLHttpRequest"}});if(o.ok)return o.json();if(!(429===o.status||o.status>=500)){if(401===o.status||403===o.status)throw new Error("Instagram no permite leer la lista ahora mismo. Comprueba que has iniciado sesión y prueba más tarde.");throw new Error("Error "+o.status+" al leer Instagram.")}for(var t=60*(a+1);t>0&&!d;t--)p("Instagram pide ir más despacio. Reintentando en "+t+" s…"),await l(1e3)}throw new Error("Instagram está limitando las peticiones. Espera un rato y vuelve a probar, o usa la opción con archivo.")}async function g(e,a,n,o,r){var i=[],s="",c=0;do{if(d)throw new Error("stop");var u="/api/v1/friendships/"+t+"/"+e+"/?count=50"+("followers"===e?"&search_surface=follow_list_page":"")+(s?"&max_id="+encodeURIComponent(s):""),g=await f(u);(g.users||[]).forEach((function(e){e&&e.username&&i.push({u:String(e.username).toLowerCase(),n:e.full_name||""})})),s=g.next_max_id||"",c++;var w=r[e]||i.length+(s?50:0);p("Leyendo "+a+"… "+i.length.toLocaleString("es")+(r[e]?" de "+r[e].toLocaleString("es"):"")),m(o+n*Math.min(1,i.length/Math.max(1,w))),s&&await l(900+900*Math.random()+(c%10==0?4e3:0))}while(s);return i}}();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 (function () {
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
   var LIMIT = 200;
-  var state = { followers: new Map(), following: new Map(), pending: new Map(), lost: new Map(), gained: new Map(), prevDate: null, hasHistory: false, tab: "no", sample: false, limit: LIMIT, loadedAt: null };
+  var state = { followers: new Map(), following: new Map(), pending: new Map(), lost: new Map(), gained: new Map(), names: new Map(), prevDate: null, hasHistory: false, tab: "no", sample: false, limit: LIMIT, loadedAt: null };
 
   // ---------- Almacenamiento local (opcional, siempre con try/catch) ----------
   var DONE_KEY = "qnms-revisados", HIST_KEY = "qnms-historial";
@@ -386,17 +429,31 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
     if (/^followers(_\d+)?\.(json|html?)$/.test(base)) return "followers";
     if (/^following\.(json|html?)$/.test(base)) return "following";
     if (/^pending_follow_requests\.(json|html?)$/.test(base)) return "pending";
+    if (/^quien-no-me-sigue.*\.json$/.test(base)) return "qnms";
     return null;
   }
   function parseInto(kind, name, text, maps) {
+    if (kind === "qnms") { readPayload(JSON.parse(text), maps); return; }
     if (/\.json$/i.test(name)) collectJSON(JSON.parse(text), maps[kind]); else collectHTML(text, maps[kind]);
+  }
+
+  // Formato propio (modo rápido): { qnms: 1, followers: [{u, n}], following: [{u, n}] }
+  function validPayload(d) {
+    var ok = function (a) { return Array.isArray(a) && a.length <= 200000 && a.every(function (x) { return x && typeof x.u === "string" && x.u.length <= 64; }); };
+    return d && d.qnms === 1 && ok(d.followers) && ok(d.following);
+  }
+  function readPayload(d, maps) {
+    if (!validPayload(d)) throw new Error("payload");
+    ["followers", "following"].forEach(function (k) {
+      d[k].forEach(function (x) { var u = norm(x.u); if (!u) return; if (!maps[k].has(u)) maps[k].set(u, 0); if (x.n) maps.names.set(u, String(x.n).slice(0, 80)); });
+    });
   }
 
   async function handleFiles(fileList) {
     var files = Array.from(fileList || []);
     if (!files.length) return;
     setStatus("Leyendo tu archivo…"); $("progress").hidden = false;
-    var maps = { followers: new Map(), following: new Map(), pending: new Map() };
+    var maps = { followers: new Map(), following: new Map(), pending: new Map(), names: new Map() };
     var found = { followers: 0, following: 0, pending: 0 };
     try {
       for (var i = 0; i < files.length; i++) {
@@ -410,8 +467,15 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
             parseInto(k, entries[j][0], await entries[j][1].async("string"), maps); found[k]++;
           }
         } else {
-          var kind = kindOf(path); if (!kind) continue;
-          parseInto(kind, path, await f.text(), maps); found[kind]++;
+          var kind = kindOf(path);
+          if (!kind && /\.json$/i.test(f.name)) {
+            // Archivo del modo rápido aunque se haya renombrado
+            try { var maybe = JSON.parse(await f.text()); if (validPayload(maybe)) { readPayload(maybe, maps); found.followers++; found.following++; } } catch (e) {}
+            continue;
+          }
+          if (!kind) continue;
+          parseInto(kind, path, await f.text(), maps);
+          if (kind === "qnms") { found.followers++; found.following++; } else found[kind]++;
         }
       }
     } catch (err) {
@@ -425,9 +489,13 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
     if (!found.followers && !found.following) { setStatus("No encontré tus seguidores ni seguidos en ese archivo. Al pedir la exportación, marca «Seguidores y seguidos» (mira la guía de abajo).", "err"); return; }
     if (!found.followers || !found.following) { setStatus("Falta " + (found.followers ? "following.json (a quién sigues)" : "followers_1.json (tus seguidores)") + ". Sube los dos a la vez, o el .zip completo.", "err"); return; }
 
+    applyData(maps);
+  }
+
+  function applyData(maps) {
     var now = Date.now();
     var cmp = compareWithHistory(maps.followers);
-    state.followers = maps.followers; state.following = maps.following; state.pending = maps.pending;
+    state.followers = maps.followers; state.following = maps.following; state.pending = maps.pending; state.names = maps.names;
     state.lost = cmp.lost; state.gained = cmp.gained; state.prevDate = cmp.prevDate; state.hasHistory = !!cmp.prevDate;
     state.sample = false; state.loadedAt = now; state.limit = LIMIT;
     if (state.hasHistory && cmp.lost.size) state.tab = "lost";
@@ -471,8 +539,9 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
   };
   function lists() {
     var out = { no: [], fans: [], mutual: [], lost: [], new: [], pending: [] };
-    state.following.forEach(function (ts, u) { (state.followers.has(u) ? out.mutual : out.no).push({ user: u, ts: ts }); });
-    state.followers.forEach(function (ts, u) { if (!state.following.has(u)) out.fans.push({ user: u, ts: ts }); });
+    var i = 0;
+    state.following.forEach(function (ts, u) { (state.followers.has(u) ? out.mutual : out.no).push({ user: u, ts: ts, i: i++ }); });
+    state.followers.forEach(function (ts, u) { if (!state.following.has(u)) out.fans.push({ user: u, ts: ts, i: i++ }); });
     state.lost.forEach(function (ts, u) { out.lost.push({ user: u, ts: ts, follows: state.following.has(u) }); });
     state.gained.forEach(function (ts, u) { out.new.push({ user: u, ts: ts }); });
     state.pending.forEach(function (ts, u) { out.pending.push({ user: u, ts: ts }); });
@@ -495,8 +564,9 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
     var items = all.filter(function (x) { return (!q || x.user.indexOf(q) !== -1) && (!hide || !done.has(x.user)); });
     items.sort(function (a, b) {
       if (sort === "az") return a.user.localeCompare(b.user);
-      if (sort === "old") return (a.ts || Infinity) - (b.ts || Infinity) || a.user.localeCompare(b.user);
-      return (b.ts || 0) - (a.ts || 0) || a.user.localeCompare(b.user);
+      var di = (a.i || 0) - (b.i || 0);
+      if (sort === "old") return (a.ts || Infinity) - (b.ts || Infinity) || -di || a.user.localeCompare(b.user);
+      return (b.ts || 0) - (a.ts || 0) || di || a.user.localeCompare(b.user);
     });
     return items;
   }
@@ -555,6 +625,7 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
       who.appendChild(a);
       var info = "";
       if (x.ts && when) info = when + " el " + fmt.format(new Date(x.ts * 1000));
+      else if (state.names.get(x.user)) info = state.names.get(x.user);
       if (state.tab === "lost") info = x.follows ? "Tú todavía la sigues" : "Tú ya no la sigues";
       if (info) { var sm = document.createElement("small"); sm.textContent = info; who.appendChild(sm); }
       var open = document.createElement("a"); open.className = "open"; open.href = url; open.target = "_blank"; open.rel = "noopener"; open.textContent = "Abrir ↗";
@@ -615,7 +686,7 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
     state.lost = new Map([["ejemplo_irene", 0], ["ejemplo_fotos_sara", 0]]); state.gained = new Map([["ejemplo_hugo", now - 2 * day]]);
     state.hasHistory = true; state.prevDate = Date.now() - 14 * day * 1000;
     state.sample = true; state.tab = "no"; state.limit = LIMIT;
-    setStatus("Mostrando un ejemplo. Sube tu archivo para ver tus datos reales.");
+    setStatus("Mostrando un ejemplo con datos inventados.");
     render();
   }
 
@@ -651,6 +722,46 @@ footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
   });
   // Descargar CSV solo cuando la página se abre por sí sola (en una ventana enmarcada las descargas pueden estar bloqueadas)
   try { if (window.top === window.self) $("csv").hidden = false; } catch (e) {}
+
+  // ---------- Modo rápido: recibir datos del marcador abierto en instagram.com ----------
+  var IG_ORIGIN = "https://www.instagram.com";
+  if (location.hash === "#recibir" && window.opener) {
+    setStatus("Recibiendo tus datos de Instagram…"); $("progress").hidden = false;
+    var got = false, tries = 0;
+    var ping = setInterval(function () {
+      if (got || tries++ > 30) { clearInterval(ping); if (!got) { $("progress").hidden = true; setStatus("No llegaron los datos. Vuelve a Instagram y pulsa «Descargar archivo», luego súbelo aquí.", "err"); } return; }
+      try { window.opener.postMessage({ type: "qnms-ready" }, IG_ORIGIN); } catch (e) {}
+    }, 500);
+    window.addEventListener("message", function (e) {
+      if (e.origin !== IG_ORIGIN || !e.data || e.data.type !== "qnms-data" || got) return;
+      got = true; clearInterval(ping); $("progress").hidden = true;
+      var maps = { followers: new Map(), following: new Map(), pending: new Map(), names: new Map() };
+      try { readPayload(e.data.payload, maps); } catch (err) { setStatus("Los datos recibidos no son válidos. Prueba de nuevo.", "err"); return; }
+      try { window.history.replaceState(null, "", location.pathname); } catch (err) {}
+      applyData(maps);
+    });
+  }
+
+  // Pestañas de método (rápido / archivo)
+  function setMethod(m) {
+    document.querySelectorAll(".method-tab").forEach(function (b) { b.setAttribute("aria-selected", String(b.dataset.method === m)); });
+    $("panel-fast").hidden = m !== "fast"; $("drop").hidden = m !== "file";
+  }
+  document.querySelectorAll(".method-tab").forEach(function (b) { b.addEventListener("click", function () { setMethod(b.dataset.method); }); });
+  var desktop = matchMedia("(hover: hover) and (pointer: fine)").matches && window.innerWidth >= 900;
+  setMethod(desktop ? "fast" : "file");
+  $("fast-mobile").hidden = desktop;
+
+  // Marcador: la URL de esta web se inserta en el código para que sepa adónde volver
+  var SITE_URL = (/^https:/.test(location.protocol) && !/claude/.test(location.hostname)) || location.hostname === "localhost" ? location.origin + location.pathname : "https://davcrelib.github.io/quien-no-me-sigue/";
+  var bmCode = "javascript:" + encodeURIComponent($("bm-src").textContent.replace("__SITE__", SITE_URL).trim());
+  $("bm-link").setAttribute("href", bmCode);
+  $("bm-link").addEventListener("click", function (e) { e.preventDefault(); $("bm-hint").textContent = "No lo pulses aquí: arrástralo a tu barra de marcadores y púlsalo cuando estés en instagram.com."; });
+  $("bm-copy").addEventListener("click", function () {
+    var btn = $("bm-copy");
+    var done2 = function () { flash(btn, "Código copiado ✓", "Copiar código"); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(bmCode).then(done2, function () { flash(btn, "No se pudo copiar", "Copiar código"); });
+  });
 
   loadSample();
 })();
