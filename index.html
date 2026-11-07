@@ -753,7 +753,7 @@ kbd { font-family: var(--mono); font-size: 0.78em; border: 1px solid var(--line)
   $("fast-mobile").hidden = desktop;
 
   // Marcador: la URL de esta web se inserta en el código para que sepa adónde volver
-  var SITE_URL = /^https:/.test(location.protocol) && !/claude/.test(location.hostname) ? location.origin + location.pathname : "https://davcrelib.github.io/quien-no-me-sigue/";
+  var SITE_URL = (/^https:/.test(location.protocol) && !/claude/.test(location.hostname)) || location.hostname === "localhost" ? location.origin + location.pathname : "https://davcrelib.github.io/quien-no-me-sigue/";
   var bmCode = "javascript:" + encodeURIComponent($("bm-src").textContent.replace("__SITE__", SITE_URL).trim());
   $("bm-link").setAttribute("href", bmCode);
   $("bm-link").addEventListener("click", function (e) { e.preventDefault(); $("bm-hint").textContent = "No lo pulses aquí: arrástralo a tu barra de marcadores y púlsalo cuando estés en instagram.com."; });
