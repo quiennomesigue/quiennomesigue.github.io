@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Quién no me sigue?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Descubre quién no te sigue de vuelta en Instagram y quién te ha dejado de seguir. Gratis, sin contraseñas: tus datos no salen de tu navegador.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: columna central limpia sobre fondo con trama de puntos suave; el momento visual es el diagrama de dos círculos (te siguen / sigues) que resume y navega los resultados */
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --ink: #12131a;
+  --muted: #646a7e;
+  --line: #e3e6ef;
+  --soft: #eef0f7;
+  --blue: #3b5bfd;      /* te siguen */
+  --hot: #f0386b;       /* no te siguen de vuelta */
+  --ok: #12996a;
+  --dot: rgba(59, 91, 253, .10);
+  --shadow: 0 1px 2px rgba(18, 19, 40, .04), 0 12px 32px -16px rgba(18, 19, 40, .16);
+  --display: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0d0e14; --surface: #15171f; --ink: #eef0f6; --muted: #9aa0b4; --line: #262a36; --soft: #1c1f2a; --blue: #7d93ff; --hot: #ff6b93; --ok: #4fd3a0; --dot: rgba(125, 147, 255, .08); --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -16px rgba(0,0,0,.7); color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #0d0e14; --surface: #15171f; --ink: #eef0f6; --muted: #9aa0b4; --line: #262a36; --soft: #1c1f2a; --blue: #7d93ff; --hot: #ff6b93; --ok: #4fd3a0; --dot: rgba(125, 147, 255, .08); --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -16px rgba(0,0,0,.7); color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background-color: var(--bg); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.6;
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.2px); background-size: 22px 22px; background-attachment: fixed;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px; -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px; }
+h1, h2 { margin: 0; text-wrap: balance; line-height: 1.05; }
+h1 { font-family: var(--display); font-weight: 400; font-size: clamp(3rem, 11vw, 5.4rem); letter-spacing: -0.02em; }
+h1 em { color: var(--hot); }
+h2 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
+p { margin: 0; }
+a { color: var(--blue); text-underline-offset: 3px; }
+code { font-family: var(--mono); font-size: 0.84em; background: var(--soft); padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+.muted { color: var(--muted); }
+.eyebrow { font-size: 0.78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+.hero { display: flex; flex-direction: column; gap: 18px; padding-top: 64px; }
+.hero .eyebrow { display: inline-flex; gap: 8px; align-items: center; }
+.hero .eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 20%, transparent); }
+.lead { color: var(--muted); font-size: 1.12rem; max-width: 46ch; }
+
+.drop { background: var(--surface); border: 1.5px dashed color-mix(in srgb, var(--blue) 35%, var(--line)); border-radius: 20px; padding: 32px 26px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; box-shadow: var(--shadow); transition: border-color .2s, background .2s, transform .2s; }
+.drop.over { border-color: var(--blue); background: color-mix(in srgb, var(--blue) 6%, var(--surface)); transform: scale(1.01); }
+.drop-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--blue) 12%, var(--surface)); color: var(--blue); }
+.drop-icon svg { width: 22px; height: 22px; }
+.btns { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+button { font: inherit; font-weight: 500; font-size: 0.95rem; cursor: pointer; border-radius: 999px; padding: 9px 18px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); transition: border-color .15s, transform .15s, background .15s; }
+button:hover { border-color: var(--ink); }
+button:active { transform: translateY(1px); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, .region:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+button.primary { background: var(--ink); border-color: var(--ink); color: var(--surface); padding: 11px 22px; }
+button.primary:hover { background: var(--blue); border-color: var(--blue); }
+button.ghost, button.link { border: 0; background: none; padding: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-weight: 400; border-radius: 0; }
+button.ghost:hover, button.link:hover { color: var(--ink); }
+.status { font-size: 0.92rem; color: var(--muted); }
+.status.err { color: var(--hot); font-weight: 500; }
+.status.ok { color: var(--ok); font-weight: 500; }
+.opt { display: inline-flex; gap: 8px; align-items: flex-start; font-size: 0.85rem; color: var(--muted); }
+.opt input { margin-top: 4px; accent-color: var(--blue); }
+.progress { width: 100%; height: 3px; border-radius: 3px; background: var(--soft); overflow: hidden; }
+.progress i { display: block; height: 100%; width: 40%; background: linear-gradient(90deg, var(--blue), var(--hot)); animation: slide 1.1s ease-in-out infinite; }
+@keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(260%); } }
+
+.results { display: flex; flex-direction: column; gap: 18px; }
+.res-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.res-head .eyebrow { display: none; }
+.res-head h2 { font-family: var(--display); font-weight: 400; font-size: 2.2rem; letter-spacing: -0.01em; }
+#res-meta { font-size: 0.85rem; }
+.notice { font-size: 0.9rem; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 2px; }
+.notice.sample { border-style: dashed; }
+.notice b { color: var(--ink); font-weight: 600; }
+
+.venn-card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 18px 12px 8px; box-shadow: var(--shadow); }
+.venn { display: block; width: 100%; max-width: 520px; height: auto; margin: 0 auto; overflow: visible; }
+.venn .c-a { fill: var(--blue); fill-opacity: .13; stroke: var(--blue); stroke-opacity: .5; stroke-width: 1.2; }
+.venn .c-b { fill: var(--hot); fill-opacity: .11; stroke: var(--hot); stroke-opacity: .5; stroke-width: 1.2; }
+.venn .cap { font-family: var(--font); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; fill: var(--muted); }
+.region { cursor: pointer; outline: none; }
+.region .num { font-family: var(--display); font-size: 44px; fill: var(--ink); transition: fill .15s; }
+.region .lab { font-family: var(--font); font-size: 12.5px; fill: var(--muted); }
+.region .hit { fill: transparent; }
+.region.r-no .num { fill: var(--hot); }
+.region.r-fans .num { fill: var(--blue); }
+.region[aria-pressed="true"] .lab { fill: var(--ink); font-weight: 600; }
+.region[aria-pressed="true"] .bar { opacity: 1; }
+.region .bar { opacity: 0; transition: opacity .15s; }
+.region:hover .lab { fill: var(--ink); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 8px; }
+.stat { border: 1px solid var(--line); border-radius: 999px; background: var(--surface); padding: 7px 14px; display: inline-flex; align-items: baseline; gap: 8px; font-weight: 500; color: var(--muted); font-size: 0.88rem; }
+.stat b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.stat[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+.stat[aria-selected="true"] b { color: var(--surface); }
+.stat.k-lost b, .stat.k-no b { color: var(--hot); }
+.stat.k-new b { color: var(--ok); }
+.stat[aria-selected="true"].k-lost b, .stat[aria-selected="true"].k-no b, .stat[aria-selected="true"].k-new b { color: var(--surface); }
+
+.toolbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.toolbar input[type="search"] { flex: 1 1 180px; min-width: 0; font: inherit; padding: 9px 16px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; }
+.toolbar select { font: inherit; font-size: 0.9rem; padding: 6px 4px; border: 0; background: transparent; color: var(--muted); }
+.toolbar button { padding: 7px 14px; font-size: 0.88rem; }
+.check { display: inline-flex; gap: 6px; align-items: center; font-size: 0.88rem; color: var(--muted); }
+.check input, .list input { accent-color: var(--blue); }
+.tabdesc { font-size: 0.9rem; color: var(--muted); }
+
+.list { list-style: none; margin: 0; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
+.list li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; transition: background .15s; animation: rise .35s ease both; }
+.list li:hover { background: var(--soft); }
+.list li.done .who, .list li.done .avatar { opacity: .4; }
+@keyframes rise { from { opacity: .3; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.avatar { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 0.92rem; background: color-mix(in srgb, var(--c) 16%, var(--surface)); color: var(--c); }
+.who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.who a { font-family: var(--mono); font-size: 0.93rem; color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
+.who a:hover { color: var(--blue); }
+.who small { color: var(--muted); font-size: 0.78rem; }
+.open { flex: none; font-size: 0.82rem; color: var(--muted); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; background: var(--surface); }
+.open:hover { color: var(--blue); border-color: var(--blue); }
+.list label { flex: none; font-size: 0.8rem; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.empty { padding: 32px 0; color: var(--muted); justify-content: center; text-align: center; }
+.more { width: 100%; border: 0; border-radius: 12px; padding: 12px; color: var(--muted); background: none; }
+.more:hover { background: var(--soft); }
+.foot-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 0.82rem; color: var(--muted); }
+
+.card { display: flex; flex-direction: column; gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 30px 26px; }
+.card > .eyebrow { color: var(--blue); }
+.card h2 { font-family: var(--display); font-weight: 400; font-size: 2rem; }
+.guide ol { margin: 0; padding: 0; list-style: none; counter-reset: g; display: flex; flex-direction: column; gap: 12px; }
+.guide ol li { counter-increment: g; position: relative; padding-left: 40px; min-height: 28px; padding-top: 2px; }
+.guide ol li::before { position: absolute; left: 0; top: 0; content: counter(g); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 0.82rem; font-weight: 600; background: color-mix(in srgb, var(--blue) 12%, var(--surface)); color: var(--blue); font-variant-numeric: tabular-nums; }
+.path { font-weight: 600; }
+.tip { font-size: 0.9rem; color: var(--muted); }
+.guide a { overflow-wrap: anywhere; }
+details { border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+.faq { display: flex; flex-direction: column; gap: 12px; }
+details p { margin-top: 8px; color: var(--muted); font-size: 0.93rem; }
+footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); left: 0; top: 0; }
+@media (max-width: 560px) {
+  .hero { padding-top: 40px; }
+  .drop, .card { padding: 24px 18px; }
+  .list label span, .open { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ---------- Responsive ---------- */
+.intro, .res-side, .res-main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.intro { gap: 32px; }
+.list li, button, .open, .stat { min-height: 40px; }
+.list li { min-height: 58px; }
+@media (min-width: 960px) {
+  .wrap { max-width: 1120px; gap: 72px; }
+  .intro { display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: center; padding-top: 48px; }
+  .intro .hero { padding-top: 0; }
+  .results { display: grid; grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .res-side { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); display: flex; flex-direction: column; gap: 18px; }
+  .res-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .toolbar { padding-top: 0; }
+  .guide { display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; row-gap: 16px; align-items: start; }
+  .guide > .eyebrow, .guide > h2, .guide > .tip:first-of-type { grid-column: 1 / -1; }
+  .guide > ol, .guide > .tip:nth-of-type(2) { grid-column: 1; }
+  .guide > .faq { grid-column: 2; grid-row: 4 / span 2; }
+  .faq details:first-child { border-top: 0; padding-top: 0; }
+}
+@media (min-width: 600px) and (max-width: 959px) {
+  .wrap { max-width: 720px; }
+}
+
+@media (max-width: 959px) {
+  .results { gap: 18px; }
+}
+@media (max-width: 600px) {
+  .wrap { gap: 40px; }
+  h1 { font-size: clamp(2.6rem, 13vw, 3.4rem); }
+  .lead { font-size: 1.02rem; }
+  .venn-card { padding: 14px 4px 4px; }
+  .region .num { font-size: 54px; }
+  .region .lab { font-size: 14px; }
+  .venn .cap { font-size: 14px; }
+  .stats { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity; margin-inline: -16px; padding-inline: 16px; padding-bottom: 4px; scrollbar-width: none; }
+  .stats::-webkit-scrollbar { display: none; }
+  .stat { flex: none; scroll-snap-align: start; }
+  .toolbar { gap: 8px 10px; }
+  .toolbar input[type="search"] { flex-basis: 100%; min-height: 44px; font-size: 16px; }
+  .toolbar button { flex: 1 1 auto; }
+  .btns { width: 100%; }
+  .btns .primary { flex: 1 1 100%; min-height: 48px; }
+  .list { padding: 4px; border-radius: 16px; }
+  .list li { padding: 10px 8px; }
+  .list input[type="checkbox"] { width: 20px; height: 20px; }
+  .res-head h2, .card h2 { font-size: 1.9rem; }
+}
+</style>
+</head><body>
+
+<div class="wrap">
+  <div class="intro">
+  <header class="hero">
+    <span class="eyebrow"><i></i>Gratis · Sin contraseña · Privado</span>
+    <h1>¿Quién no me <em>sigue</em>?</h1>
+    <p class="lead">Sube la exportación de tus datos de Instagram y mira quién no te sigue de vuelta. Sin contraseña. Nada sale de tu navegador.</p>
+  </header>
+
+  <section class="drop" id="drop" aria-labelledby="drop-title">
+    <span class="drop-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span>
+    <h2 id="drop-title">Arrastra aquí tu <code>.zip</code> de Instagram</h2>
+    <p class="muted">También valen <code>followers_1.json</code> y <code>following.json</code> sueltos.</p>
+    <div class="btns">
+      <button class="primary" id="pick" type="button">Elegir archivo</button>
+      <button class="ghost" id="pick-dir" type="button">Elegir carpeta</button>
+      <button class="ghost" id="sample" type="button">Ver ejemplo</button>
+    </div>
+    <input class="sr" type="file" id="file" multiple accept=".zip,.json,.html,application/zip,application/json,text/html" tabindex="-1" aria-hidden="true">
+    <input class="sr" type="file" id="dir" webkitdirectory multiple tabindex="-1" aria-hidden="true">
+    <div class="progress" id="progress" hidden><i></i></div>
+    <p class="status" id="status" role="status">¿Aún no tienes el archivo? <a href="#guia">Mira cómo pedirlo</a>.</p>
+    <label class="opt"><input type="checkbox" id="remember" checked> <span>Recordar en este navegador para avisarte de quién te deja de seguir.</span></label>
+  </section>
+  </div>
+
+  <section class="results" id="results" aria-labelledby="res-title">
+    <div class="res-side">
+    <div class="res-head">
+      <div><span class="eyebrow" id="res-eyebrow">Ejemplo</span><h2 id="res-title">Tus resultados</h2></div>
+      <span class="muted" id="res-meta"></span>
+    </div>
+    <div class="notice sample" id="sample-note">Estos son datos de ejemplo inventados. Sube tu archivo para ver tus listas reales.</div>
+    <div class="notice history" id="history-note" hidden></div>
+    <div class="venn-card">
+      <svg class="venn" viewBox="0 0 420 250" role="group" aria-label="Resumen: te siguen, mutuos y no te siguen de vuelta">
+        <text class="cap" x="120" y="16" text-anchor="middle">Te siguen</text>
+        <text class="cap" x="300" y="16" text-anchor="middle">Sigues</text>
+        <circle class="c-a" cx="160" cy="135" r="105"></circle>
+        <circle class="c-b" cx="260" cy="135" r="105"></circle>
+        <g class="region r-fans" data-tab="fans" role="button" tabindex="0" aria-pressed="false">
+          <rect class="hit" x="55" y="40" width="100" height="190"></rect>
+          <text class="num" id="v-fans" x="103" y="140" text-anchor="middle">0</text>
+          <text class="lab" x="103" y="164" text-anchor="middle">no les sigues</text>
+          <rect class="bar" x="83" y="174" width="40" height="3" rx="1.5" fill="var(--blue)"></rect>
+        </g>
+        <g class="region r-mutual" data-tab="mutual" role="button" tabindex="0" aria-pressed="false">
+          <rect class="hit" x="160" y="50" width="100" height="170"></rect>
+          <text class="num" id="v-mutual" x="210" y="140" text-anchor="middle">0</text>
+          <text class="lab" x="210" y="164" text-anchor="middle">mutuos</text>
+          <rect class="bar" x="190" y="174" width="40" height="3" rx="1.5" fill="var(--ink)"></rect>
+        </g>
+        <g class="region r-no" data-tab="no" role="button" tabindex="0" aria-pressed="false">
+          <rect class="hit" x="265" y="40" width="100" height="190"></rect>
+          <text class="num" id="v-no" x="317" y="140" text-anchor="middle">0</text>
+          <text class="lab" x="317" y="164" text-anchor="middle">no te siguen</text>
+          <rect class="bar" x="297" y="174" width="40" height="3" rx="1.5" fill="var(--hot)"></rect>
+        </g>
+      </svg>
+    </div>
+    <div class="stats" role="tablist" aria-label="Listas" id="stats"></div>
+    </div>
+    <div class="res-main">
+    <div class="toolbar">
+      <label class="sr" for="q">Buscar usuario</label>
+      <input type="search" id="q" placeholder="Buscar usuario…" autocomplete="off">
+      <label class="sr" for="sort">Ordenar</label>
+      <select id="sort">
+        <option value="recent">Más recientes primero</option>
+        <option value="old">Más antiguos primero</option>
+        <option value="az">A → Z</option>
+      </select>
+      <label class="check"><input type="checkbox" id="hide-done"> Ocultar revisados</label>
+      <button type="button" id="copy">Copiar lista</button>
+      <button type="button" id="csv" hidden>Descargar CSV</button>
+    </div>
+    <p class="tabdesc" id="tabdesc"></p>
+    <ul class="list" id="list" aria-live="polite"></ul>
+    <div class="foot-row">
+      <span>Los perfiles marcados como revisados se recuerdan en este navegador.</span>
+      <button type="button" class="link" id="clear" hidden>Borrar historial guardado</button>
+    </div>
+    </div>
+  </section>
+
+  <section class="card guide" id="guia" aria-labelledby="guide-title">
+    <span class="eyebrow">Paso 1</span>
+    <h2 id="guide-title">Cómo conseguir tu archivo</h2>
+    <p class="tip">Es la forma oficial y segura. Instagram prepara un archivo con tus seguidores y seguidos; suele tardar entre unos minutos y unas horas.</p>
+    <ol>
+      <li>Abre Instagram y ve a tu <span class="path">Perfil → menú ☰ → Centro de cuentas</span>.</li>
+      <li>Entra en <span class="path">Tu información y permisos → Exportar tu información</span> (en algunas versiones se llama <span class="path">Descargar tu información</span>).</li>
+      <li>Pulsa <span class="path">Crear exportación</span>, elige tu cuenta de Instagram y después <span class="path">Exportar al dispositivo</span>.</li>
+      <li>En <span class="path">Personalizar información</span> desmarca todo y deja solo <span class="path">Seguidores y seguidos</span>. El archivo será pequeño y llegará antes.</li>
+      <li>Muy importante: en <span class="path">Formato</span> elige <span class="path">JSON</span> y en <span class="path">Intervalo de fechas</span> elige <span class="path">Desde el principio</span>.</li>
+      <li>Pulsa <span class="path">Iniciar exportación</span>. Cuando esté lista te llegará un aviso o un correo. Descarga el <code>.zip</code> y súbelo aquí arriba.</li>
+    </ol>
+    <p class="tip">Atajo desde el ordenador: <a href="https://accountscenter.instagram.com/info_and_permissions/dyi/" target="_blank" rel="noopener">accountscenter.instagram.com/info_and_permissions/dyi</a></p>
+    <div class="faq">
+    <details>
+      <summary>¿Cómo sé quién me ha dejado de seguir?</summary>
+      <p>Instagram no lo indica en sus datos, así que lo calculamos nosotros: cada vez que subes un archivo guardamos un resumen en tu navegador. La próxima vez que subas una exportación nueva, la comparamos con la anterior y te mostramos quién se fue y quién llegó. Repite la exportación cada semana o cada mes.</p>
+    </details>
+    <details>
+      <summary>¿Por qué no pedís mi usuario y contraseña?</summary>
+      <p>Las apps que piden tu contraseña pueden robarte la cuenta, y las que leen Instagram de forma automática hacen que Instagram bloquee o limite tu perfil. Con tu propio archivo no hay ningún riesgo y cumples las normas de Instagram.</p>
+    </details>
+    <details>
+      <summary>¿Mis datos se envían a algún sitio?</summary>
+      <p>No. El archivo se lee dentro de tu navegador. No hay servidor ni base de datos. El resumen para comparar se guarda solo en este dispositivo y puedes borrarlo cuando quieras.</p>
+    </details>
+    <details>
+      <summary>Me dice que no encuentra los archivos</summary>
+      <p>Comprueba que marcaste «Seguidores y seguidos» al pedir la exportación. Dentro del zip están en <code>connections/followers_and_following/</code>. Si tienes muchos seguidores habrá varios archivos (<code>followers_1.json</code>, <code>followers_2.json</code>…) y se leen todos.</p>
+    </details>
+    <details>
+      <summary>Alguien aparece en la lista pero sí me sigue</summary>
+      <p>Los datos son del momento en que pediste la exportación. Si alguien te siguió después o cambió su nombre de usuario, no coincidirá. Las cuentas desactivadas también pueden aparecer.</p>
+    </details>
+    </div>
+  </section>
+
+  <footer>
+    <span>Gratis y sin ánimo de lucro. No afiliado a Instagram ni a Meta.</span>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var LIMIT = 200;
+  var state = { followers: new Map(), following: new Map(), pending: new Map(), lost: new Map(), gained: new Map(), prevDate: null, hasHistory: false, tab: "no", sample: false, limit: LIMIT, loadedAt: null };
+
+  // ---------- Almacenamiento local (opcional, siempre con try/catch) ----------
+  var DONE_KEY = "qnms-revisados", HIST_KEY = "qnms-historial";
+  function load(key, def) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch (e) { return def; } }
+  function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch (e) { return false; } }
+  var done = new Set(load(DONE_KEY, []));
+  function saveDone() { save(DONE_KEY, Array.from(done)); }
+  function history() { var h = load(HIST_KEY, []); return Array.isArray(h) ? h : []; }
+
+  // ---------- Lectura de la exportación ----------
+  function norm(u) { return String(u || "").trim().replace(/^@/, "").toLowerCase(); }
+  function fromHref(href) {
+    try {
+      var url = new URL(href, "https://www.instagram.com/");
+      if (!/(^|\.)instagram\.com$/i.test(url.hostname)) return "";
+      var parts = url.pathname.split("/").filter(Boolean).filter(function (p) { return p !== "_u"; });
+      return parts.length ? parts[0] : "";
+    } catch (e) { return ""; }
+  }
+  function entryUser(e) {
+    var s = (Array.isArray(e.string_list_data) && e.string_list_data[0]) || {};
+    var u = norm(s.value || e.title || fromHref(s.href || ""));
+    return u ? { user: u, ts: Number(s.timestamp) || 0 } : null;
+  }
+  function collectJSON(data, out) {
+    if (Array.isArray(data)) {
+      data.forEach(function (item) {
+        if (item && typeof item === "object" && "string_list_data" in item) { var r = entryUser(item); if (r) addTo(out, r); }
+        else collectJSON(item, out);
+      });
+    } else if (data && typeof data === "object") {
+      Object.keys(data).forEach(function (k) { collectJSON(data[k], out); });
+    }
+  }
+  var IGNORE = /^(explore|accounts|p|reel|reels|stories|direct|about|legal|developer)$/i;
+  function collectHTML(text, out) {
+    var doc = new DOMParser().parseFromString(text, "text/html");
+    doc.querySelectorAll("a[href]").forEach(function (a) {
+      var u = norm(fromHref(a.getAttribute("href")));
+      if (u && !IGNORE.test(u)) addTo(out, { user: u, ts: 0 });
+    });
+  }
+  function addTo(map, r) { var p = map.get(r.user); if (p === undefined || (r.ts && r.ts > p)) map.set(r.user, r.ts); }
+  function kindOf(path) {
+    var base = path.split("/").pop().toLowerCase();
+    if (/^followers(_\d+)?\.(json|html?)$/.test(base)) return "followers";
+    if (/^following\.(json|html?)$/.test(base)) return "following";
+    if (/^pending_follow_requests\.(json|html?)$/.test(base)) return "pending";
+    return null;
+  }
+  function parseInto(kind, name, text, maps) {
+    if (/\.json$/i.test(name)) collectJSON(JSON.parse(text), maps[kind]); else collectHTML(text, maps[kind]);
+  }
+
+  async function handleFiles(fileList) {
+    var files = Array.from(fileList || []);
+    if (!files.length) return;
+    setStatus("Leyendo tu archivo…"); $("progress").hidden = false;
+    var maps = { followers: new Map(), following: new Map(), pending: new Map() };
+    var found = { followers: 0, following: 0, pending: 0 };
+    try {
+      for (var i = 0; i < files.length; i++) {
+        var f = files[i], path = f.webkitRelativePath || f.name;
+        if (/\.zip$/i.test(f.name) || /zip/.test(f.type)) {
+          if (typeof JSZip === "undefined") throw new Error("zip-lib");
+          var zip = await JSZip.loadAsync(f), entries = [];
+          zip.forEach(function (p, entry) { if (!entry.dir && kindOf(p)) entries.push([p, entry]); });
+          for (var j = 0; j < entries.length; j++) {
+            var k = kindOf(entries[j][0]);
+            parseInto(k, entries[j][0], await entries[j][1].async("string"), maps); found[k]++;
+          }
+        } else {
+          var kind = kindOf(path); if (!kind) continue;
+          parseInto(kind, path, await f.text(), maps); found[kind]++;
+        }
+      }
+    } catch (err) {
+      $("progress").hidden = true;
+      setStatus(err && err.message === "zip-lib"
+        ? "No se pudo cargar el lector de .zip. Descomprime el archivo y sube followers_1.json y following.json."
+        : "No se pudo leer el archivo. Comprueba que es la exportación de Instagram en formato JSON o HTML.", "err");
+      return;
+    }
+    $("progress").hidden = true;
+    if (!found.followers && !found.following) { setStatus("No encontré tus seguidores ni seguidos en ese archivo. Al pedir la exportación, marca «Seguidores y seguidos» (mira la guía de abajo).", "err"); return; }
+    if (!found.followers || !found.following) { setStatus("Falta " + (found.followers ? "following.json (a quién sigues)" : "followers_1.json (tus seguidores)") + ". Sube los dos a la vez, o el .zip completo.", "err"); return; }
+
+    var now = Date.now();
+    var cmp = compareWithHistory(maps.followers);
+    state.followers = maps.followers; state.following = maps.following; state.pending = maps.pending;
+    state.lost = cmp.lost; state.gained = cmp.gained; state.prevDate = cmp.prevDate; state.hasHistory = !!cmp.prevDate;
+    state.sample = false; state.loadedAt = now; state.limit = LIMIT;
+    if (state.hasHistory && cmp.lost.size) state.tab = "lost";
+    else if (state.tab === "lost" || state.tab === "new") state.tab = "no";
+    if ($("remember").checked) saveSnapshot(maps, now);
+    setStatus("Listo: " + maps.followers.size.toLocaleString("es") + " seguidores y " + maps.following.size.toLocaleString("es") + " seguidos.", "ok");
+    render();
+    $("results").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  }
+
+  function sameSet(a, b) { if (a.length !== b.size) return false; for (var i = 0; i < a.length; i++) if (!b.has(a[i])) return false; return true; }
+  function compareWithHistory(followers) {
+    var h = history(), lost = new Map(), gained = new Map();
+    // La referencia es la última foto distinta de la actual (si se sube el mismo archivo dos veces, se compara con la anterior)
+    var prev = null;
+    for (var i = h.length - 1; i >= 0; i--) { if (!sameSet(h[i].followers || [], followers)) { prev = h[i]; break; } }
+    if (!prev) return { lost: lost, gained: gained, prevDate: h.length ? h[h.length - 1].date : null };
+    var before = new Set(prev.followers);
+    before.forEach(function (u) { if (!followers.has(u)) lost.set(u, 0); });
+    followers.forEach(function (ts, u) { if (!before.has(u)) gained.set(u, ts); });
+    return { lost: lost, gained: gained, prevDate: prev.date };
+  }
+  function saveSnapshot(maps, now) {
+    var h = history();
+    var snap = { date: now, followers: Array.from(maps.followers.keys()), following: Array.from(maps.following.keys()) };
+    if (h.length && sameSet(h[h.length - 1].followers || [], maps.followers)) h[h.length - 1] = snap; else h.push(snap);
+    while (h.length > 12) h.shift();
+    if (!save(HIST_KEY, h)) { h = h.slice(-2); save(HIST_KEY, h); }
+  }
+
+  function setStatus(msg, kind) { var s = $("status"); s.textContent = msg; s.className = "status" + (kind ? " " + kind : ""); }
+
+  // ---------- Listas ----------
+  var TABS = {
+    no:      { label: "No te siguen de vuelta", desc: "Cuentas a las que sigues y que no te siguen.", when: "Las sigues desde" },
+    fans:    { label: "Te siguen, tú a ellos no", desc: "Cuentas que te siguen y a las que tú no sigues.", when: "Te sigue desde" },
+    mutual:  { label: "Mutuos", desc: "Os seguís mutuamente.", when: "La sigues desde" },
+    lost:    { label: "Te dejaron de seguir", desc: "Te seguían en tu análisis anterior y ya no.", when: "" },
+    new:     { label: "Nuevos seguidores", desc: "Te siguen desde tu análisis anterior.", when: "Te sigue desde" },
+    pending: { label: "Solicitudes pendientes", desc: "Cuentas privadas a las que pediste seguir y aún no te han aceptado.", when: "Solicitado el" }
+  };
+  function lists() {
+    var out = { no: [], fans: [], mutual: [], lost: [], new: [], pending: [] };
+    state.following.forEach(function (ts, u) { (state.followers.has(u) ? out.mutual : out.no).push({ user: u, ts: ts }); });
+    state.followers.forEach(function (ts, u) { if (!state.following.has(u)) out.fans.push({ user: u, ts: ts }); });
+    state.lost.forEach(function (ts, u) { out.lost.push({ user: u, ts: ts, follows: state.following.has(u) }); });
+    state.gained.forEach(function (ts, u) { out.new.push({ user: u, ts: ts }); });
+    state.pending.forEach(function (ts, u) { out.pending.push({ user: u, ts: ts }); });
+    return out;
+  }
+  function visibleTabs(l) {
+    var t = ["no", "fans", "mutual"];
+    if (state.hasHistory) { t.unshift("lost"); t.push("new"); }
+    if (l.pending.length) t.push("pending");
+    return t;
+  }
+  var COLORS = ["#3443d6", "#b23d1a", "#157446", "#8a3fb8", "#0f7c8c", "#a1621a", "#c2366b", "#4b5563"];
+  function color(u) { var h = 0; for (var i = 0; i < u.length; i++) h = (h * 31 + u.charCodeAt(i)) >>> 0; return COLORS[h % COLORS.length]; }
+  var fmt = new Intl.DateTimeFormat("es", { day: "numeric", month: "short", year: "numeric" });
+  var fmtLong = new Intl.DateTimeFormat("es", { day: "numeric", month: "long", year: "numeric" });
+
+  function current(l) {
+    var all = l[state.tab] || [];
+    var q = norm($("q").value), sort = $("sort").value, hide = $("hide-done").checked;
+    var items = all.filter(function (x) { return (!q || x.user.indexOf(q) !== -1) && (!hide || !done.has(x.user)); });
+    items.sort(function (a, b) {
+      if (sort === "az") return a.user.localeCompare(b.user);
+      if (sort === "old") return (a.ts || Infinity) - (b.ts || Infinity) || a.user.localeCompare(b.user);
+      return (b.ts || 0) - (a.ts || 0) || a.user.localeCompare(b.user);
+    });
+    return items;
+  }
+
+  function renderStats(l, tabs) {
+    var box = $("stats"); box.textContent = "";
+    tabs.forEach(function (t) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "stat k-" + t; b.setAttribute("role", "tab"); b.id = "tab-" + t;
+      b.setAttribute("aria-selected", String(t === state.tab));
+      var n = document.createElement("b"); n.textContent = l[t].length.toLocaleString("es");
+      var s = document.createElement("span"); s.textContent = TABS[t].label;
+      b.appendChild(n); b.appendChild(s);
+      b.addEventListener("click", function () { state.tab = t; state.limit = LIMIT; render(); });
+      box.appendChild(b);
+    });
+  }
+
+  function render() {
+    var l = lists(), tabs = visibleTabs(l);
+    if (tabs.indexOf(state.tab) === -1) state.tab = "no";
+    renderStats(l, tabs);
+    ["no", "fans", "mutual"].forEach(function (t) { $("v-" + t).textContent = l[t].length.toLocaleString("es"); });
+    document.querySelectorAll(".region").forEach(function (g) { g.setAttribute("aria-pressed", String(g.dataset.tab === state.tab)); });
+    $("sample-note").hidden = !state.sample;
+    $("res-eyebrow").textContent = state.sample ? "Ejemplo" : "Tu cuenta";
+    $("res-meta").textContent = state.loadedAt && !state.sample ? "Analizado el " + fmtLong.format(new Date(state.loadedAt)) : "";
+    var hn = $("history-note");
+    if (!state.sample && state.hasHistory) {
+      hn.hidden = false; hn.textContent = "";
+      var b = document.createElement("b"); b.textContent = "Comparado con tu análisis del " + fmtLong.format(new Date(state.prevDate));
+      var p = document.createElement("span");
+      p.textContent = state.lost.size + " " + (state.lost.size === 1 ? "cuenta te ha dejado" : "cuentas te han dejado") + " de seguir y tienes " + state.gained.size + " " + (state.gained.size === 1 ? "seguidor nuevo." : "seguidores nuevos.");
+      hn.appendChild(b); hn.appendChild(p);
+    } else if (!state.sample && state.prevDate === null && $("remember").checked) {
+      hn.hidden = false; hn.textContent = "Primer análisis guardado. Sube una exportación nueva dentro de unos días y te diremos quién te ha dejado de seguir.";
+    } else hn.hidden = true;
+    $("clear").hidden = !history().length;
+    $("tabdesc").textContent = TABS[state.tab].desc;
+
+    var items = current(l), ul = $("list"); ul.textContent = "";
+    if (!items.length) {
+      var li = document.createElement("li"); li.className = "empty";
+      li.textContent = $("q").value ? "Ningún usuario coincide con la búsqueda." : ({ no: "Todas las cuentas que sigues te siguen de vuelta.", lost: "Nadie te ha dejado de seguir desde la última vez." })[state.tab] || "No hay nadie en esta lista.";
+      ul.appendChild(li); return;
+    }
+    var frag = document.createDocumentFragment(), when = TABS[state.tab].when;
+    items.slice(0, state.limit).forEach(function (x) {
+      var li = document.createElement("li");
+      if (done.has(x.user)) li.className = "done";
+      var url = "https://www.instagram.com/" + encodeURIComponent(x.user) + "/";
+      var av = document.createElement("span"); av.className = "avatar"; av.style.setProperty("--c", color(x.user)); av.setAttribute("aria-hidden", "true");
+      av.textContent = x.user.replace(/[^a-z0-9]/g, "").charAt(0).toUpperCase() || "@";
+      var who = document.createElement("div"); who.className = "who";
+      var a = document.createElement("a"); a.href = url; a.target = "_blank"; a.rel = "noopener"; a.textContent = "@" + x.user;
+      who.appendChild(a);
+      var info = "";
+      if (x.ts && when) info = when + " el " + fmt.format(new Date(x.ts * 1000));
+      if (state.tab === "lost") info = x.follows ? "Tú todavía la sigues" : "Tú ya no la sigues";
+      if (info) { var sm = document.createElement("small"); sm.textContent = info; who.appendChild(sm); }
+      var open = document.createElement("a"); open.className = "open"; open.href = url; open.target = "_blank"; open.rel = "noopener"; open.textContent = "Abrir ↗";
+      open.setAttribute("aria-label", "Ver perfil de @" + x.user);
+      var lab = document.createElement("label");
+      var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = done.has(x.user);
+      cb.setAttribute("aria-label", "Marcar @" + x.user + " como revisado");
+      cb.addEventListener("change", function () {
+        if (cb.checked) done.add(x.user); else done.delete(x.user);
+        saveDone(); li.classList.toggle("done", cb.checked);
+        if ($("hide-done").checked) render();
+      });
+      var sp = document.createElement("span"); sp.textContent = "revisado";
+      lab.appendChild(cb); lab.appendChild(sp);
+      li.appendChild(av); li.appendChild(who); li.appendChild(open); li.appendChild(lab);
+      frag.appendChild(li);
+    });
+    ul.appendChild(frag);
+    if (items.length > state.limit) {
+      var moreLi = document.createElement("li"); moreLi.style.padding = "0";
+      var more = document.createElement("button"); more.type = "button"; more.className = "more";
+      more.textContent = "Mostrar más (" + (items.length - state.limit).toLocaleString("es") + " restantes)";
+      more.addEventListener("click", function () { state.limit += 500; render(); });
+      moreLi.appendChild(more); ul.appendChild(moreLi);
+    }
+  }
+
+  function flash(btn, text, original) { btn.textContent = text; setTimeout(function () { btn.textContent = original; }, 1800); }
+  function copyList() {
+    var text = current(lists()).map(function (x) { return "@" + x.user; }).join("\n"), btn = $("copy");
+    var fallback = function () {
+      var ta = document.createElement("textarea"); ta.value = text; ta.className = "sr"; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); flash(btn, "Copiado ✓", "Copiar lista"); } catch (e) { flash(btn, "No se pudo copiar", "Copiar lista"); }
+      ta.remove();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { flash(btn, "Copiado ✓", "Copiar lista"); }, fallback); else fallback();
+  }
+  function downloadCSV() {
+    var rows = [["usuario", "perfil", "fecha"]].concat(current(lists()).map(function (x) {
+      return [x.user, "https://www.instagram.com/" + x.user + "/", x.ts ? new Date(x.ts * 1000).toISOString().slice(0, 10) : ""];
+    }));
+    var csv = "﻿" + rows.map(function (r) { return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(","); }).join("\r\n");
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    a.download = TABS[state.tab].label.toLowerCase().replace(/[^a-z0-9ñáéíóú]+/g, "-") + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  function loadSample() {
+    var now = Math.floor(Date.now() / 1000), day = 86400;
+    var names = ["ejemplo_lucia", "ejemplo_marcos", "ejemplo_cafe_central", "ejemplo_ana.viajes", "ejemplo_pablo", "ejemplo_fotos_sara", "ejemplo_gym_norte", "ejemplo_javi.music", "ejemplo_marta", "ejemplo_recetas_abuela", "ejemplo_dani", "ejemplo_libreria_sol", "ejemplo_irene", "ejemplo_tienda_moda", "ejemplo_hugo"];
+    var following = new Map(), followers = new Map();
+    names.forEach(function (n, i) {
+      if (i % 5 !== 4) following.set(n, now - (i * 37 + 3) * day);
+      if (i % 3 !== 2) followers.set(n, now - (i * 29 + 5) * day);
+    });
+    state.following = following; state.followers = followers; state.pending = new Map([["ejemplo_cuenta_privada", now - 12 * day]]);
+    state.lost = new Map([["ejemplo_irene", 0], ["ejemplo_fotos_sara", 0]]); state.gained = new Map([["ejemplo_hugo", now - 2 * day]]);
+    state.hasHistory = true; state.prevDate = Date.now() - 14 * day * 1000;
+    state.sample = true; state.tab = "no"; state.limit = LIMIT;
+    setStatus("Mostrando un ejemplo. Sube tu archivo para ver tus datos reales.");
+    render();
+  }
+
+  // ---------- Eventos ----------
+  $("pick").addEventListener("click", function () { $("file").click(); });
+  $("pick-dir").addEventListener("click", function () { $("dir").click(); });
+  $("file").addEventListener("change", function (e) { handleFiles(e.target.files); e.target.value = ""; });
+  $("dir").addEventListener("change", function (e) { handleFiles(e.target.files); e.target.value = ""; });
+  $("sample").addEventListener("click", loadSample);
+  var drop = $("drop");
+  ["dragenter", "dragover"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function (e) { handleFiles(e.dataTransfer.files); });
+  window.addEventListener("dragover", function (e) { e.preventDefault(); });
+  window.addEventListener("drop", function (e) { e.preventDefault(); if (!drop.contains(e.target)) handleFiles(e.dataTransfer.files); });
+  document.querySelectorAll(".region").forEach(function (g) {
+    var go = function () { state.tab = g.dataset.tab; state.limit = LIMIT; render(); };
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+  $("q").addEventListener("input", function () { state.limit = LIMIT; render(); });
+  $("sort").addEventListener("change", render);
+  $("hide-done").addEventListener("change", render);
+  $("copy").addEventListener("click", copyList);
+  $("csv").addEventListener("click", downloadCSV);
+  $("clear").addEventListener("click", function () {
+    var btn = $("clear");
+    if (btn.dataset.confirm !== "1") { btn.dataset.confirm = "1"; btn.textContent = "Pulsa otra vez para confirmar"; setTimeout(function () { btn.dataset.confirm = ""; btn.textContent = "Borrar historial guardado"; }, 3500); return; }
+    try { localStorage.removeItem(HIST_KEY); localStorage.removeItem(DONE_KEY); } catch (e) {}
+    done = new Set(); btn.dataset.confirm = ""; btn.textContent = "Borrar historial guardado";
+    if (!state.sample) { state.hasHistory = false; state.prevDate = null; state.lost = new Map(); state.gained = new Map(); }
+    setStatus("Historial borrado de este navegador.", "ok"); render();
+  });
+  // Descargar CSV solo cuando la página se abre por sí sola (en una ventana enmarcada las descargas pueden estar bloqueadas)
+  try { if (window.top === window.self) $("csv").hidden = false; } catch (e) {}
+
+  loadSample();
+})();
+</script>
+</body></html>
