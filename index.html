@@ -282,12 +282,34 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
       <p><b>Sale un error de «ejecutar scripts».</b> Ve a Ajustes → Apps → Atajos → Avanzado y activa <b>Permitir ejecutar scripts</b>.</p>
       <p><b>Se queda parado o da error.</b> Espera unos minutos y vuelve a probar. Si sigue igual, usa la pestaña <b>Con archivo</b>: tarda más, pero funciona siempre.</p>
     </details>
-    <ol class="fast-steps" id="fast-android" hidden>
-      <li><span>Copia el código del botón:</span>
-        <button type="button" class="bm" id="bm-copy-android">Copiar código</button></li>
-      <li><span>En Chrome, guarda esta página en marcadores (menú <b>⋮ → ☆</b>). Luego edita ese marcador: ponle de nombre <b>qnms</b> y en la dirección pega el código.</span></li>
-      <li><span>Abre <a href="https://www.instagram.com/" target="_blank" rel="noopener">instagram.com</a> en Chrome con tu sesión iniciada, escribe <b>qnms</b> en la barra de direcciones y toca el marcador que aparece.</span></li>
+    <ol class="fast-steps ios-steps" id="fast-android" hidden>
+      <li id="and-step-setup">
+        <b class="step-title">Crea el botón en Chrome</b>
+        <span class="step-sub" id="and-setup-sub">Solo la primera vez, tarda 1 minuto.</span>
+        <button type="button" class="bm" id="bm-copy-android">Copiar código</button>
+        <span class="step-sub">Después, en Chrome, toca <b>⋮</b> (arriba a la derecha) y la estrella <b>☆</b>. Abajo saldrá «Añadido a marcadores»: toca <b>Editar</b>.</span>
+        <span class="step-sub">En <b>Nombre</b> escribe <b>qnms</b>. En <b>URL</b> borra lo que hay y mantén pulsado para <b>Pegar</b> el código. Vuelve atrás y listo.</span>
+      </li>
+      <li>
+        <b class="step-title">Entra en Instagram desde Chrome</b>
+        <span class="step-sub">En Chrome, no en la app. Si ya tienes la sesión iniciada en Chrome, pasa al paso 3.</span>
+        <a class="open-ig strong" href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener">Abrir Instagram en Chrome ↗</a>
+        <small class="muted">¿Se abre la app de Instagram? Vuelve aquí, mantén pulsado el botón y elige <b>Abrir en una pestaña nueva</b>.</small>
+      </li>
+      <li>
+        <b class="step-title">Escribe qnms en la barra de direcciones</b>
+        <span class="step-sub">En instagram.com, toca la barra de direcciones, escribe <b>qnms</b> y toca el resultado que tiene la estrella (no el de la lupa):</span>
+        <span class="share-mock" aria-hidden="true"><span class="share-ico">☆</span>qnms</span>
+        <span class="step-sub">Aparece un panel: <b>no cierres Chrome</b> mientras lee (menos de un minuto) y al terminar pulsa <b>Ver resultados</b>.</span>
+      </li>
     </ol>
+    <details class="ios-help" id="and-help" hidden>
+      <summary>¿Algo no funciona?</summary>
+      <p><b>No me sale «Editar» al guardar.</b> Toca <b>⋮ → Marcadores</b>, busca el último que guardaste, toca sus <b>⋮</b> y elige <b>Editar</b>.</p>
+      <p><b>Al escribir qnms solo salen búsquedas.</b> Comprueba que el marcador se llama exactamente <b>qnms</b> y que en la URL pegaste el código (empieza por <code>javascript:</code>).</p>
+      <p><b>No recuerdo mi contraseña de Instagram.</b> En la pantalla de inicio de sesión pulsa <i>¿Has olvidado tu contraseña?</i> y te llegará un código.</p>
+      <p><b>No uso Chrome o sigue sin ir.</b> Usa la pestaña <b>Con archivo</b>: tarda más, pero funciona en cualquier móvil.</p>
+    </details>
     <ol class="fast-steps" id="fast-desktop">
       <li><span>Arrastra este botón a tu barra de marcadores:</span>
         <a class="bm" id="bm-link" href="#" draggable="true">⚡ ¿Quién no me sigue?</a>
@@ -841,6 +863,7 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
   $("fast-ios").hidden = device !== "ios";
   $("fast-android").hidden = device !== "android";
   $("ios-help").hidden = device !== "ios";
+  $("and-help").hidden = device !== "android";
   // Quien ya instaló el atajo ve el paso 1 marcado como hecho
   var INSTALLED_KEY = "qnms-atajo";
   function markInstalled() {
@@ -865,7 +888,14 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
   $("bm-link").addEventListener("click", function (e) { e.preventDefault(); $("bm-hint").textContent = "No lo pulses aquí: arrástralo a tu barra de marcadores y púlsalo cuando estés en instagram.com."; });
   $("bm-copy-android").addEventListener("click", function () {
     var btn = $("bm-copy-android");
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(bmCode).then(function () { flash(btn, "Código copiado ✓", "Copiar código"); }, function () { flash(btn, "No se pudo copiar", "Copiar código"); });
+    var ok = function () { btn.textContent = "Código copiado ✓"; setTimeout(function () { btn.textContent = "Copiar código"; }, 4000); };
+    var legacy = function () {
+      // Por si el navegador no deja usar el portapapeles moderno
+      var ta = document.createElement("textarea"); ta.value = bmCode; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); var done = false; try { done = document.execCommand("copy"); } catch (e) {} ta.remove();
+      if (done) ok(); else flash(btn, "No se pudo copiar", "Copiar código");
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(bmCode).then(ok, legacy); else legacy();
   });
   $("bm-copy").addEventListener("click", function () {
     var btn = $("bm-copy");
