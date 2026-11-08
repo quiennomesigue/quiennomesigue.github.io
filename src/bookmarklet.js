@@ -52,49 +52,81 @@
 
   /* ---------- Lectura ---------- */
   var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
-  async function getJSON(url) {
-    for (var attempt = 0; attempt < 4; attempt++) {
-      var res = await fetch(url, { credentials: "include", headers: { "x-ig-app-id": APP_ID, "x-requested-with": "XMLHttpRequest" } });
-      if (res.ok) return res.json();
-      if (res.status === 429 || res.status >= 500) {
-        var wait = 60 * (attempt + 1);
-        for (var s = wait; s > 0 && !stopped; s--) { msg("Instagram pide ir más despacio. Reintentando en " + s + " s…"); await sleep(1000); }
+  function cookie(name) { var m = document.cookie.match(new RegExp("(?:^|;\\s*)" + name + "=([^;]*)")); return m ? decodeURIComponent(m[1]) : ""; }
+  function headers() {
+    var claim = "0"; try { claim = sessionStorage.getItem("www-claim-v2") || "0"; } catch (e) {}
+    return { "x-ig-app-id": APP_ID, "x-asbd-id": "129477", "x-csrftoken": cookie("csrftoken"), "x-ig-www-claim": claim, "x-requested-with": "XMLHttpRequest", "accept": "*/*" };
+  }
+  function fail(text, status) { var e = new Error(text); e.status = status; return e; }
+  // retries: cuántas veces esperar y reintentar si Instagram pide ir más despacio (429) o falla (5xx)
+  async function getJSON(url, retries, step) {
+    for (var attempt = 0; ; attempt++) {
+      var res = await fetch(url, { credentials: "include", headers: headers() });
+      if (res.ok) {
+        var data = await res.json().catch(function () { return null; });
+        if (data && data.status !== "fail") return data;
+        throw fail("Respuesta inesperada de Instagram (" + step + ").", 200);
+      }
+      if ((res.status === 429 || res.status >= 500) && attempt < retries) {
+        var wait = 45 * (attempt + 1);
+        for (var s = wait; s > 0 && !stopped; s--) { msg("Instagram pide ir más despacio (" + step + ", código " + res.status + "). Reintentando en " + s + " s…"); await sleep(1000); }
+        if (stopped) throw fail("stop", 0);
         continue;
       }
-      if (res.status === 401 || res.status === 403) throw new Error("Instagram no permite leer la lista ahora mismo. Comprueba que has iniciado sesión y prueba más tarde.");
-      throw new Error("Error " + res.status + " al leer Instagram.");
+      throw fail(step + ": Instagram respondió con el código " + res.status + ".", res.status);
     }
-    throw new Error("Instagram está limitando las peticiones. Espera un rato y vuelve a probar, o usa la opción con archivo.");
   }
 
-  var counts = { followers: 0, following: 0 };
-  async function readList(kind, label, base, offset, total) {
-    var out = [], max = "", page = 0;
+  // Dos formas de leer cada lista: la API web (v1) y, si falla, la consulta GraphQL que usa la web antigua
+  var GQL = { followers: ["c76146de99bb02f6415203be841dd25a", "edge_followed_by"], following: ["d04b0a864b4b54837c0d870b0e77e076", "edge_follow"] };
+  async function pageV1(kind, cursor, step) {
+    var url = "/api/v1/friendships/" + uid + "/" + kind + "/?count=50" + (kind === "followers" ? "&search_surface=follow_list_page" : "") + (cursor ? "&max_id=" + encodeURIComponent(cursor) : "");
+    var d = await getJSON(url, 3, step);
+    return { users: (d.users || []).map(function (u) { return { u: u.username, n: u.full_name }; }), next: d.next_max_id || "" };
+  }
+  async function pageGQL(kind, cursor, step) {
+    var vars = { id: uid, include_reel: false, fetch_mutual: false, first: 50 };
+    if (cursor) vars.after = cursor;
+    var d = await getJSON("/graphql/query/?query_hash=" + GQL[kind][0] + "&variables=" + encodeURIComponent(JSON.stringify(vars)), 3, step);
+    var edge = d && d.data && d.data.user && d.data.user[GQL[kind][1]];
+    if (!edge) throw fail("Respuesta inesperada de Instagram (" + step + ").", 200);
+    if (!total[kind]) total[kind] = edge.count;
+    return { users: (edge.edges || []).map(function (e) { return { u: e.node.username, n: e.node.full_name }; }), next: edge.page_info && edge.page_info.has_next_page ? edge.page_info.end_cursor : "" };
+  }
+
+  var total = {};
+  async function readList(kind, label, base, offset) {
+    var out = [], cursor = "", page = 0, fetcher = pageV1, step = label;
     do {
-      if (stopped) throw new Error("stop");
-      var url = "/api/v1/friendships/" + uid + "/" + kind + "/?count=50" + (kind === "followers" ? "&search_surface=follow_list_page" : "") + (max ? "&max_id=" + encodeURIComponent(max) : "");
-      var data = await getJSON(url);
-      (data.users || []).forEach(function (u) { if (u && u.username) out.push({ u: String(u.username).toLowerCase(), n: u.full_name || "" }); });
-      max = data.next_max_id || "";
-      page++;
-      var expected = total[kind] || out.length + (max ? 50 : 0);
+      if (stopped) throw fail("stop", 0);
+      var r;
+      try { r = await fetcher(kind, cursor, step); }
+      catch (e) {
+        // Si la API v1 falla en la primera página (no por límite de velocidad), probamos GraphQL
+        if (fetcher === pageV1 && page === 0 && e.status !== 0 && e.status !== 429) { fetcher = pageGQL; r = await fetcher(kind, cursor, step); }
+        else throw e;
+      }
+      r.users.forEach(function (u) { if (u && u.u) out.push({ u: String(u.u).toLowerCase(), n: u.n || "" }); });
+      cursor = r.next; page++;
+      var expected = total[kind] || out.length + (cursor ? 50 : 0);
       msg("Leyendo " + label + "… " + out.length.toLocaleString("es") + (total[kind] ? " de " + total[kind].toLocaleString("es") : ""));
       bar(offset + base * Math.min(1, out.length / Math.max(1, expected)));
-      if (max) await sleep(900 + Math.random() * 900 + (page % 10 === 0 ? 4000 : 0));
-    } while (max);
+      if (cursor) await sleep(1200 + Math.random() * 1200 + (page % 8 === 0 ? 5000 : 0));
+    } while (cursor);
     return out;
   }
 
   var result = null;
   (async function () {
     try {
-      var total = {};
+      msg("Conectando con tu cuenta…");
       try {
-        var info = await getJSON("/api/v1/users/" + uid + "/info/");
+        // Solo para mostrar el progreso: un intento, sin reintentos
+        var info = await getJSON("/api/v1/users/" + uid + "/info/", 0, "perfil");
         if (info && info.user) { total.followers = info.user.follower_count; total.following = info.user.following_count; total.username = info.user.username; }
       } catch (e) { /* sin totales: seguimos igualmente */ }
-      var following = await readList("following", "a quién sigues", 50, 0, total);
-      var followers = await readList("followers", "tus seguidores", 50, 50, total);
+      var following = await readList("following", "a quién sigues", 50, 0);
+      var followers = await readList("followers", "tus seguidores", 50, 50);
       bar(100);
       var fset = {}; followers.forEach(function (x) { fset[x.u] = 1; });
       var notBack = following.filter(function (x) { return !fset[x.u]; }).length;
@@ -102,7 +134,12 @@
       msg("Listo: " + notBack.toLocaleString("es") + " cuentas no te siguen de vuelta (de " + following.length.toLocaleString("es") + " que sigues).");
       $("done").style.display = "flex";
     } catch (e) {
-      if (e.message !== "stop") msg(e.message);
+      if (e.message === "stop") return;
+      msg(e.status === 429
+        ? "Instagram está limitando las peticiones de tu cuenta ahora mismo. Espera unos minutos y vuelve a probar, o usa la opción con archivo."
+        : e.status === 401 || e.status === 403
+          ? "Instagram no permite leer la lista. Comprueba que has iniciado sesión en instagram.com y vuelve a probar."
+          : e.message + " Haz una captura y pásasela al creador de la web.");
     }
   })();
 
