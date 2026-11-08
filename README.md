@@ -28,8 +28,8 @@ Lee tus listas desde tu propia sesión, despacio y solo en lectura (nunca sigue 
 ## Desarrollo
 
 - `index.html`: toda la web (HTML, CSS y JS en un solo archivo).
-- `src/atajo.js`: código del atajo de iPhone (se pega en la acción «Ejecutar JavaScript en la página web»).
-- `src/bookmarklet.js`: código del modo rápido. Tras editarlo, ejecuta `node scripts/build.js` para insertarlo minificado en `index.html`.
+- `src/atajo.js`: código del atajo de iPhone, generado por el build (se pega en la acción «Ejecutar JavaScript en la página web»).
+- `src/bookmarklet.js`: código del modo rápido. Tras editarlo, ejecuta `node scripts/build.js` para insertarlo minificado en `index.html` y regenerar `src/atajo.js`.
 - GitHub Pages publica automáticamente la rama `main`.
 
 ## Privacidad
