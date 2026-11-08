@@ -3,8 +3,8 @@
 <title>¿Quién no me sigue?</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Descubre quién no te sigue de vuelta en Instagram y quién te ha dejado de seguir. Gratis, sin contraseñas: tus datos no salen de tu navegador.">
-<meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0d0e14" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
@@ -19,91 +19,170 @@
 <meta property="og:image:alt" content="¿Quién no me sigue? Diagrama de quién te sigue, mutuos y quién no te sigue.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: columna central limpia sobre fondo con trama de puntos suave; el momento visual es el diagrama de dos círculos (te siguen / sigues) que resume y navega los resultados */
+/* Diseño: minimalista, una sola columna centrada en móvil. El motivo visual son dos círculos que se cruzan (te siguen / sigues), presente en el fondo del titular, el logo y el diagrama de resultados. */
 :root {
-  --bg: #f6f7fb;
+  --bg: #fbfbfd;
   --surface: #ffffff;
-  --ink: #12131a;
-  --muted: #646a7e;
-  --line: #e3e6ef;
-  --soft: #eef0f7;
-  --blue: #3b5bfd;      /* te siguen */
-  --hot: #f0386b;       /* no te siguen de vuelta */
-  --ok: #12996a;
-  --dot: rgba(59, 91, 253, .10);
-  --shadow: 0 1px 2px rgba(18, 19, 40, .04), 0 12px 32px -16px rgba(18, 19, 40, .16);
-  --display: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --font: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --ink: #0b0b10;
+  --muted: #6b6b78;
+  --line: #ebebf1;
+  --soft: #f3f3f7;
+  --blue: #3d5afe;      /* te siguen */
+  --hot: #ff2e6e;       /* no te siguen de vuelta */
+  --ok: #0f9f68;
+  --grad: linear-gradient(100deg, #3d5afe 0%, #8a3ffc 50%, #ff2e6e 100%);
+  --glow-a: rgba(61, 90, 254, .16);
+  --glow-b: rgba(255, 46, 110, .13);
+  --shadow: 0 1px 1px rgba(10, 10, 30, .03), 0 2px 4px rgba(10, 10, 30, .03), 0 18px 40px -20px rgba(10, 10, 30, .18);
+  --shadow-sm: 0 1px 2px rgba(10, 10, 30, .05);
+  --font: "Geist", "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 24px;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --bg: #0d0e14; --surface: #15171f; --ink: #eef0f6; --muted: #9aa0b4; --line: #262a36; --soft: #1c1f2a; --blue: #7d93ff; --hot: #ff6b93; --ok: #4fd3a0; --dot: rgba(125, 147, 255, .08); --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -16px rgba(0,0,0,.7); color-scheme: dark; }
+  :root:not([data-theme="light"]) { --bg: #09090b; --surface: #121216; --ink: #f4f4f7; --muted: #9a9aa8; --line: #24242b; --soft: #1a1a20; --blue: #7d8fff; --hot: #ff5c8d; --ok: #3fd49b; --glow-a: rgba(93, 116, 255, .20); --glow-b: rgba(255, 70, 130, .14); --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 40px -20px rgba(0,0,0,.8); --shadow-sm: 0 1px 2px rgba(0,0,0,.4); color-scheme: dark; }
 }
-:root[data-theme="dark"] { --bg: #0d0e14; --surface: #15171f; --ink: #eef0f6; --muted: #9aa0b4; --line: #262a36; --soft: #1c1f2a; --blue: #7d93ff; --hot: #ff6b93; --ok: #4fd3a0; --dot: rgba(125, 147, 255, .08); --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -16px rgba(0,0,0,.7); color-scheme: dark; }
+:root[data-theme="dark"] { --bg: #09090b; --surface: #121216; --ink: #f4f4f7; --muted: #9a9aa8; --line: #24242b; --soft: #1a1a20; --blue: #7d8fff; --hot: #ff5c8d; --ok: #3fd49b; --glow-a: rgba(93, 116, 255, .20); --glow-b: rgba(255, 70, 130, .14); --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 40px -20px rgba(0,0,0,.8); --shadow-sm: 0 1px 2px rgba(0,0,0,.4); color-scheme: dark; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+html { overflow-x: clip; }
 body {
-  background-color: var(--bg); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.6;
-  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.2px); background-size: 22px 22px; background-attachment: fixed;
+  position: relative; margin: 0; background-color: var(--bg); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.55;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 0 64px; -webkit-font-smoothing: antialiased;
+  padding-bottom: 40px; -webkit-font-smoothing: antialiased; overflow-x: clip; letter-spacing: -0.006em;
 }
-.wrap { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px; }
-h1, h2 { margin: 0; text-wrap: balance; line-height: 1.05; }
-h1 { font-family: var(--display); font-weight: 400; font-size: clamp(3rem, 11vw, 5.4rem); letter-spacing: -0.02em; }
-h1 em { color: var(--hot); }
-h2 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
+.wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 96px; position: relative; z-index: 1; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
 p { margin: 0; }
 a { color: var(--blue); text-underline-offset: 3px; }
-code { font-family: var(--mono); font-size: 0.84em; background: var(--soft); padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+code { font-family: var(--mono); font-size: 0.84em; background: var(--soft); padding: 1px 6px; border-radius: 6px; overflow-wrap: anywhere; }
 .muted { color: var(--muted); }
-.eyebrow { font-size: 0.78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.eyebrow { font-size: 0.75rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-family: var(--mono); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); left: 0; top: 0; }
+.ico { width: 1.05em; height: 1.05em; vertical-align: -0.15em; }
 
-.hero { display: flex; flex-direction: column; gap: 18px; padding-top: 64px; }
-.hero .eyebrow { display: inline-flex; gap: 8px; align-items: center; }
-.hero .eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 20%, transparent); }
-.lead { color: var(--muted); font-size: 1.12rem; max-width: 46ch; }
+/* ---------- Barra superior ---------- */
+.nav { display: flex; align-items: center; justify-content: space-between; padding-top: max(18px, env(safe-area-inset-top, 0px)); position: relative; z-index: 2; }
+.logo { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 0.95rem; letter-spacing: -0.02em; }
+.logo svg { width: 30px; height: 20px; }
+.nav-links { display: flex; gap: 22px; font-size: 0.9rem; }
+.nav-links a { color: var(--muted); text-decoration: none; }
+.nav-links a:hover { color: var(--ink); }
 
-.drop { background: var(--surface); border: 1.5px dashed color-mix(in srgb, var(--blue) 35%, var(--line)); border-radius: 20px; padding: 32px 26px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; box-shadow: var(--shadow); transition: border-color .2s, background .2s, transform .2s; }
-.drop.over { border-color: var(--blue); background: color-mix(in srgb, var(--blue) 6%, var(--surface)); transform: scale(1.01); }
-.drop-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--blue) 12%, var(--surface)); color: var(--blue); }
-.drop-icon svg { width: 22px; height: 22px; }
-.btns { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
-button { font: inherit; font-weight: 500; font-size: 0.95rem; cursor: pointer; border-radius: 999px; padding: 9px 18px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); transition: border-color .15s, transform .15s, background .15s; }
-button:hover { border-color: var(--ink); }
-button:active { transform: translateY(1px); }
-button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, .region:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-button.primary { background: var(--ink); border-color: var(--ink); color: var(--surface); padding: 11px 22px; }
-button.primary:hover { background: var(--blue); border-color: var(--blue); }
+/* ---------- Portada ---------- */
+.intro { display: flex; flex-direction: column; align-items: center; gap: 44px; position: relative; }
+.hero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; padding-top: 56px; position: relative; isolation: isolate; width: 100%; }
+.bg-glow { position: absolute; left: 0; right: 0; top: 0; height: 860px; overflow: hidden; pointer-events: none; z-index: 0; }
+.bg-glow i { position: absolute; top: 20px; width: 560px; height: 560px; border-radius: 50%; filter: blur(70px); }
+.bg-glow i:first-child { left: calc(50% - 440px); background: var(--glow-a); }
+.bg-glow i:last-child { left: calc(50% - 120px); background: var(--glow-b); }
+@media (max-width: 600px) { .bg-glow i { width: 340px; height: 340px; top: 60px; filter: blur(50px); } .bg-glow i:first-child { left: calc(50% - 270px); } .bg-glow i:last-child { left: calc(50% - 70px); } }
+.pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb, var(--surface) 70%, transparent); backdrop-filter: blur(8px); font-size: 0.84rem; color: var(--muted); box-shadow: var(--shadow-sm); }
+.pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent); }
+h1 { font-weight: 700; font-size: clamp(2.9rem, 12.5vw, 6.2rem); line-height: 0.98; letter-spacing: -0.055em; }
+h1 em { font-style: normal; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: 0.04em; }
+.lead { color: var(--muted); font-size: clamp(1.05rem, 2.4vw, 1.22rem); max-width: 36ch; line-height: 1.5; }
+.trust { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; margin: 2px 0 0; padding: 0; list-style: none; font-size: 0.88rem; color: var(--muted); }
+.trust li { display: inline-flex; align-items: center; gap: 7px; }
+.trust svg { width: 16px; height: 16px; color: var(--ink); }
+
+/* ---------- Botones ---------- */
+button { font: inherit; font-weight: 500; font-size: 0.95rem; cursor: pointer; border-radius: 999px; padding: 9px 18px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); transition: border-color .15s, transform .15s, background .15s, box-shadow .15s, opacity .15s; }
+button:hover { border-color: color-mix(in srgb, var(--ink) 40%, var(--line)); }
+button:active, .bm:active, .open-ig:active { transform: scale(.98); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, .region:focus-visible, summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+button.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); padding: 12px 24px; font-weight: 600; }
+button.primary:hover { opacity: .88; }
 button.ghost, button.link { border: 0; background: none; padding: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-weight: 400; border-radius: 0; }
 button.ghost:hover, button.link:hover { color: var(--ink); }
-.status { font-size: 0.92rem; color: var(--muted); }
+.bm { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 24px; border-radius: 999px; background: var(--grad); color: #fff; font-weight: 600; font-size: 1rem; text-decoration: none; cursor: pointer; border: 0; box-shadow: 0 8px 24px -10px rgba(138, 63, 252, .65), inset 0 1px 0 rgba(255,255,255,.25); transition: transform .15s, box-shadow .15s, filter .15s; }
+.bm:hover { filter: brightness(1.06); box-shadow: 0 12px 28px -10px rgba(138, 63, 252, .75), inset 0 1px 0 rgba(255,255,255,.25); }
+a.bm#bm-link { cursor: grab; }
+button.bm { font: inherit; font-weight: 600; font-size: 1rem; }
+.open-ig { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 500; font-size: 0.95rem; box-shadow: var(--shadow-sm); transition: border-color .15s, transform .15s; }
+.open-ig:hover { border-color: color-mix(in srgb, var(--ink) 40%, var(--line)); }
+.open-ig.strong { font-weight: 600; background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.open-ig.strong:hover { opacity: .88; }
+kbd { font-family: var(--mono); font-size: 0.78em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; background: var(--surface); }
+
+/* ---------- Tarjeta de método ---------- */
+.method { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 560px; min-width: 0; }
+.method-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: var(--soft); border: 1px solid var(--line); border-radius: 999px; }
+.method-tab { border: 0; background: transparent; border-radius: 999px; padding: 8px 12px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1.2; font-size: 0.92rem; min-height: 42px; }
+.method-tab:hover { color: var(--ink); }
+.method-tab small { font-size: 0.75rem; font-weight: 400; opacity: .8; }
+.method-tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm), 0 0 0 1px var(--line); }
+.drop { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 30px 28px; display: flex; flex-direction: column; gap: 22px; align-items: flex-start; box-shadow: var(--shadow); transition: border-color .2s, background .2s, transform .2s; text-align: left; }
+.drop.over { border-color: var(--blue); background: color-mix(in srgb, var(--blue) 5%, var(--surface)); transform: scale(1.01); }
+.drop > h2 { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.03em; line-height: 1.25; }
+.drop-icon { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: var(--soft); color: var(--ink); border: 1px solid var(--line); }
+.drop-icon svg { width: 20px; height: 20px; }
+
+.fast-steps { margin: 0; padding: 0; list-style: none; counter-reset: f; display: flex; flex-direction: column; gap: 26px; width: 100%; }
+.fast-steps li { counter-increment: f; position: relative; padding-left: 46px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.fast-steps li::before { content: counter(f); position: absolute; left: 0; top: -1px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 0.82rem; font-weight: 600; font-family: var(--mono); background: var(--surface); color: var(--ink); border: 1px solid var(--line); box-shadow: var(--shadow-sm); z-index: 1; }
+.fast-steps li::after { content: ""; position: absolute; left: 15px; top: 34px; bottom: -22px; width: 1px; background: linear-gradient(var(--line), var(--line)); }
+.fast-steps li:last-child::after { display: none; }
+.fast-steps li.done::before { content: "✓"; font-family: var(--font); background: color-mix(in srgb, var(--ok) 14%, var(--surface)); border-color: color-mix(in srgb, var(--ok) 40%, var(--line)); color: var(--ok); }
+.fast-steps li > span:first-child { padding-top: 3px; }
+.step-title { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.35; padding-top: 3px; }
+.step-sub { color: var(--muted); font-size: 0.93rem; line-height: 1.5; }
+.step-sub b { color: var(--ink); font-weight: 600; }
+.fast-steps small.muted { font-size: 0.82rem; line-height: 1.45; }
+.share-mock { display: flex; align-items: center; gap: 12px; width: 100%; max-width: 320px; padding: 10px 14px; border-radius: 14px; background: var(--soft); border: 1px solid var(--line); font-weight: 500; font-size: 0.95rem; }
+.share-ico { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--grad); color: #fff; font-size: 0.95rem; flex: none; }
+.tip-pin { display: block; max-width: 420px; padding: 11px 14px; border-radius: 14px; background: color-mix(in srgb, var(--blue) 7%, var(--surface)); border: 1px solid color-mix(in srgb, var(--blue) 18%, var(--line)); color: var(--muted); font-size: 0.85rem; line-height: 1.45; }
+.tip-pin b { color: var(--ink); font-weight: 600; }
+.env-warn { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; width: 100%; padding: 18px; border-radius: 18px; border: 1px solid color-mix(in srgb, var(--hot) 40%, var(--line)); background: color-mix(in srgb, var(--hot) 7%, var(--surface)); font-size: 0.95rem; }
+.env-warn b { font-size: 1.02rem; font-weight: 600; letter-spacing: -0.02em; }
+.ios-help { width: 100%; }
+.fine { display: flex; gap: 10px; font-size: 0.8rem; line-height: 1.5; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; width: 100%; }
+.fine svg { flex: none; width: 16px; height: 16px; margin-top: 1px; color: var(--ok); }
+.btns { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; }
+.status { font-size: 0.92rem; color: var(--muted); text-align: center; }
+.status:empty { display: none; }
 .status.err { color: var(--hot); font-weight: 500; }
 .status.ok { color: var(--ok); font-weight: 500; }
-.opt { display: inline-flex; gap: 8px; align-items: flex-start; font-size: 0.85rem; color: var(--muted); }
-.opt input { margin-top: 4px; accent-color: var(--blue); }
+.opt { display: inline-flex; gap: 8px; align-items: flex-start; justify-content: center; font-size: 0.82rem; color: var(--muted); }
+.opt input { margin-top: 3px; accent-color: var(--ink); }
 .progress { width: 100%; height: 3px; border-radius: 3px; background: var(--soft); overflow: hidden; }
-.progress i { display: block; height: 100%; width: 40%; background: linear-gradient(90deg, var(--blue), var(--hot)); animation: slide 1.1s ease-in-out infinite; }
+.progress i { display: block; height: 100%; width: 40%; background: var(--grad); animation: slide 1.1s ease-in-out infinite; }
 @keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(260%); } }
 
-.results { display: flex; flex-direction: column; gap: 18px; }
-.res-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.res-head .eyebrow { display: none; }
-.res-head h2 { font-family: var(--display); font-weight: 400; font-size: 2.2rem; letter-spacing: -0.01em; }
+/* ---------- Desplegables ---------- */
+details { border-top: 1px solid var(--line); }
+summary { cursor: pointer; font-weight: 500; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 0; letter-spacing: -0.015em; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: ""; flex: none; width: 10px; height: 10px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-3px) rotate(45deg); transition: transform .2s; }
+details[open] summary::after { transform: translateY(2px) rotate(-135deg); }
+details p { margin: 0 0 14px; color: var(--muted); font-size: 0.93rem; line-height: 1.6; }
+details p:last-child { margin-bottom: 18px; }
+details p b { color: var(--ink); font-weight: 600; }
+.ios-help summary { padding: 14px 0 0; font-size: 0.92rem; color: var(--muted); }
+.ios-help[open] summary { padding-bottom: 12px; }
+.ios-help { border-top: 0; margin-top: -8px; }
+
+/* ---------- Resultados ---------- */
+.results { display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 16px; }
+.res-side, .res-main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.res-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.res-head > div { display: flex; flex-direction: column; gap: 8px; }
+.res-head h2 { font-weight: 700; font-size: clamp(2rem, 6vw, 2.6rem); letter-spacing: -0.045em; line-height: 1; }
 #res-meta { font-size: 0.85rem; }
-.notice { font-size: 0.9rem; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 2px; }
-.notice.sample { border-style: dashed; }
+.notice { font-size: 0.9rem; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 13px 16px; display: flex; flex-direction: column; gap: 2px; line-height: 1.5; }
+.notice.sample { border-style: dashed; background: transparent; }
 .notice b { color: var(--ink); font-weight: 600; }
 
-.venn-card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 18px 12px 8px; box-shadow: var(--shadow); }
+.venn-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 22px 12px 12px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
 .venn { display: block; width: 100%; max-width: 520px; height: auto; margin: 0 auto; overflow: visible; }
-.venn .c-a { fill: var(--blue); fill-opacity: .13; stroke: var(--blue); stroke-opacity: .5; stroke-width: 1.2; }
-.venn .c-b { fill: var(--hot); fill-opacity: .11; stroke: var(--hot); stroke-opacity: .5; stroke-width: 1.2; }
-.venn .cap { font-family: var(--font); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; fill: var(--muted); }
+.venn .c-a { fill: url(#ga); stroke: var(--blue); stroke-opacity: .35; stroke-width: 1; }
+.venn .c-b { fill: url(#gb); stroke: var(--hot); stroke-opacity: .35; stroke-width: 1; }
+.venn .cap { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; fill: var(--muted); }
 .region { cursor: pointer; outline: none; }
-.region .num { font-family: var(--display); font-size: 44px; fill: var(--ink); transition: fill .15s; }
+.region .num { font-family: var(--font); font-weight: 700; font-size: 42px; letter-spacing: -0.04em; fill: var(--ink); transition: fill .15s; }
 .region .lab { font-family: var(--font); font-size: 12.5px; fill: var(--muted); }
 .region .hit { fill: transparent; }
 .region.r-no .num { fill: var(--hot); }
@@ -114,163 +193,148 @@ button.ghost:hover, button.link:hover { color: var(--ink); }
 .region:hover .lab { fill: var(--ink); }
 
 .stats { display: flex; flex-wrap: wrap; gap: 8px; }
-.stat { border: 1px solid var(--line); border-radius: 999px; background: var(--surface); padding: 7px 14px; display: inline-flex; align-items: baseline; gap: 8px; font-weight: 500; color: var(--muted); font-size: 0.88rem; }
+.stat { border: 1px solid var(--line); border-radius: 999px; background: var(--surface); padding: 7px 14px; display: inline-flex; align-items: baseline; gap: 8px; font-weight: 500; color: var(--muted); font-size: 0.88rem; min-height: 40px; align-items: center; }
 .stat b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
-.stat[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface); }
-.stat[aria-selected="true"] b { color: var(--surface); }
+.stat[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.stat[aria-selected="true"] b { color: var(--bg); }
 .stat.k-lost b, .stat.k-no b { color: var(--hot); }
 .stat.k-new b { color: var(--ok); }
-.stat[aria-selected="true"].k-lost b, .stat[aria-selected="true"].k-no b, .stat[aria-selected="true"].k-new b { color: var(--surface); }
+.stat[aria-selected="true"].k-lost b, .stat[aria-selected="true"].k-no b, .stat[aria-selected="true"].k-new b { color: var(--bg); }
 
-.toolbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
-.toolbar input[type="search"] { flex: 1 1 180px; min-width: 0; font: inherit; padding: 9px 16px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; }
+.toolbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding-block: 10px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.toolbar input[type="search"] { flex: 1 1 180px; min-width: 0; font: inherit; padding: 10px 18px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; box-shadow: var(--shadow-sm); }
+.toolbar input[type="search"]:focus { border-color: color-mix(in srgb, var(--ink) 40%, var(--line)); outline: none; }
 .toolbar select { font: inherit; font-size: 0.9rem; padding: 6px 4px; border: 0; background: transparent; color: var(--muted); }
-.toolbar button { padding: 7px 14px; font-size: 0.88rem; }
+.toolbar button { padding: 7px 14px; font-size: 0.88rem; min-height: 40px; }
 .check { display: inline-flex; gap: 6px; align-items: center; font-size: 0.88rem; color: var(--muted); }
-.check input, .list input { accent-color: var(--blue); }
+.check input, .list input { accent-color: var(--ink); }
 .tabdesc { font-size: 0.9rem; color: var(--muted); }
 
-.list { list-style: none; margin: 0; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
-.list li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; transition: background .15s; animation: rise .35s ease both; }
+.list { list-style: none; margin: 0; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); }
+.list li { display: flex; align-items: center; gap: 14px; padding: 10px 12px; min-height: 60px; border-radius: 14px; transition: background .15s; animation: rise .35s ease both; }
+.list li { position: relative; }
+.list li + li:not(.empty)::before { content: ""; position: absolute; top: 0; left: 66px; right: 12px; height: 1px; background: var(--line); }
 .list li:hover { background: var(--soft); }
+.list li:hover::before, .list li:hover + li::before { opacity: 0; }
 .list li.done .who, .list li.done .avatar { opacity: .4; }
 @keyframes rise { from { opacity: .3; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-.avatar { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 0.92rem; background: color-mix(in srgb, var(--c) 16%, var(--surface)); color: var(--c); }
+.avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 0.92rem; background: color-mix(in srgb, var(--c) 14%, var(--surface)); color: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 22%, transparent); }
 .who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.who a { font-family: var(--mono); font-size: 0.93rem; color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
+.who a { font-family: var(--mono); font-size: 0.92rem; color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
 .who a:hover { color: var(--blue); }
 .who small { color: var(--muted); font-size: 0.78rem; }
-.open { flex: none; font-size: 0.82rem; color: var(--muted); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; background: var(--surface); }
-.open:hover { color: var(--blue); border-color: var(--blue); }
+.open { flex: none; font-size: 0.82rem; color: var(--ink); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; background: var(--surface); min-height: 34px; display: inline-flex; align-items: center; }
+.open:hover { border-color: color-mix(in srgb, var(--ink) 40%, var(--line)); }
 .list label { flex: none; font-size: 0.8rem; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
-.empty { padding: 32px 0; color: var(--muted); justify-content: center; text-align: center; }
-.more { width: 100%; border: 0; border-radius: 12px; padding: 12px; color: var(--muted); background: none; }
+.empty { padding: 36px 0; color: var(--muted); justify-content: center; text-align: center; }
+.more { width: 100%; border: 0; border-radius: 14px; padding: 12px; color: var(--muted); background: none; }
 .more:hover { background: var(--soft); }
 .foot-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 0.82rem; color: var(--muted); }
 
-.card { display: flex; flex-direction: column; gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 30px 26px; }
-.card > .eyebrow { color: var(--blue); }
-.card h2 { font-family: var(--display); font-weight: 400; font-size: 2rem; }
-.guide ol { margin: 0; padding: 0; list-style: none; counter-reset: g; display: flex; flex-direction: column; gap: 12px; }
-.guide ol li { counter-increment: g; position: relative; padding-left: 40px; min-height: 28px; padding-top: 2px; }
-.guide ol li::before { position: absolute; left: 0; top: 0; content: counter(g); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 0.82rem; font-weight: 600; background: color-mix(in srgb, var(--blue) 12%, var(--surface)); color: var(--blue); font-variant-numeric: tabular-nums; }
-.path { font-weight: 600; }
+/* ---------- Guía y preguntas ---------- */
+.section-head { display: flex; flex-direction: column; gap: 12px; }
+.section-head h2 { font-weight: 700; font-size: clamp(1.9rem, 5.5vw, 2.6rem); letter-spacing: -0.045em; line-height: 1.04; }
+.section-head p { color: var(--muted); max-width: 52ch; }
+.guide { display: flex; flex-direction: column; gap: 28px; scroll-margin-top: 16px; }
+.guide ol { margin: 0; padding: 0; list-style: none; counter-reset: g; display: grid; gap: 12px; }
+.guide ol li { counter-increment: g; display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 20px; font-size: 0.95rem; color: var(--muted); }
+.guide ol li::before { content: counter(g, decimal-leading-zero); font-family: var(--mono); font-size: 0.78rem; font-weight: 500; color: var(--ink); }
+.path { font-weight: 600; color: var(--ink); }
 .tip { font-size: 0.9rem; color: var(--muted); }
 .guide a { overflow-wrap: anywhere; }
-details { border-top: 1px solid var(--line); padding-top: 12px; }
-summary { cursor: pointer; font-weight: 500; }
-.faq { display: flex; flex-direction: column; gap: 12px; }
-details p { margin-top: 8px; color: var(--muted); font-size: 0.93rem; }
-footer { color: var(--muted); font-size: 0.82rem; text-align: center; }
-.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); left: 0; top: 0; }
-@media (max-width: 560px) {
-  .hero { padding-top: 40px; }
-  .drop, .card { padding: 24px 18px; }
-  .list label span, .open { display: none; }
-}
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+.faq-sec { display: flex; flex-direction: column; gap: 24px; scroll-margin-top: 16px; }
+.faq { border-bottom: 1px solid var(--line); }
+footer { display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--muted); font-size: 0.82rem; text-align: center; border-top: 1px solid var(--line); padding-top: 32px; margin-top: -32px; }
 
-/* ---------- Método ---------- */
-.method { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.method-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; background: var(--soft); border-radius: 999px; }
-.method-tab { border: 0; background: transparent; border-radius: 999px; padding: 9px 12px; color: var(--muted); display: flex; flex-direction: column; align-items: center; line-height: 1.2; gap: 2px; }
-.method-tab small { font-size: 0.74rem; font-weight: 400; }
-.method-tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
-.drop.fast { border-style: solid; border-color: var(--line); gap: 16px; }
-.fast-steps { margin: 0; padding: 0; list-style: none; counter-reset: f; display: flex; flex-direction: column; gap: 14px; width: 100%; }
-.fast-steps li { counter-increment: f; position: relative; padding-left: 40px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-.fast-steps li::before { content: counter(f); position: absolute; left: 0; top: -2px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 0.82rem; font-weight: 600; background: color-mix(in srgb, var(--blue) 12%, var(--surface)); color: var(--blue); }
-.bm { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--hot)); color: #fff; font-weight: 600; text-decoration: none; cursor: grab; box-shadow: var(--shadow); }
-.bm:active { cursor: grabbing; }
-kbd { font-family: var(--mono); font-size: 0.78em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; background: var(--surface); }
-.fine { font-size: 0.8rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; }
-.notice-mini { font-size: 0.88rem; color: var(--hot); }
-.ico { width: 1.05em; height: 1.05em; vertical-align: -0.15em; }
-.open-ig { display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 500; font-size: 0.92rem; }
-.open-ig:hover { border-color: var(--blue); color: var(--blue); }
-button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
-.ios-steps { gap: 22px; }
-.ios-steps li { gap: 6px; }
-.ios-steps li::before { top: 0; }
-.step-title { font-size: 1.05rem; line-height: 1.4; padding-top: 2px; }
-.step-sub { color: var(--muted); font-size: 0.93rem; }
-.ios-steps .bm, .open-ig.strong { margin-top: 4px; padding: 12px 20px; font-size: 1rem; }
-.open-ig.strong { font-weight: 600; border-color: var(--ink); }
-.ios-steps li.done::before { content: "✓"; background: color-mix(in srgb, #1aa36b 16%, var(--surface)); color: #1aa36b; }
-.share-mock { display: flex; align-items: center; gap: 12px; width: 100%; max-width: 320px; padding: 10px 14px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); font-weight: 500; }
-.share-ico { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: linear-gradient(135deg, var(--blue), var(--hot)); color: #fff; font-size: 0.95rem; }
-.tip-pin { display: block; max-width: 420px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--blue) 8%, var(--surface)); color: var(--muted); font-size: 0.86rem; line-height: 1.45; }
-.tip-pin b { color: var(--ink); }
-.env-warn { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; padding: 16px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--hot) 45%, var(--line)); background: color-mix(in srgb, var(--hot) 8%, var(--surface)); font-size: 0.95rem; }
-.env-warn b { font-size: 1.02rem; }
-.ios-help { width: 100%; }
-.ios-help p b { color: var(--ink); }
-
-/* ---------- Responsive ---------- */
-.intro, .res-side, .res-main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
-.intro { gap: 32px; }
-.list li, button, .open, .stat { min-height: 40px; }
-.list li { min-height: 58px; }
+/* ---------- Escritorio ---------- */
 @media (min-width: 960px) {
-  .wrap { max-width: 1120px; gap: 72px; }
-  .intro { display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: center; padding-top: 48px; }
-  .intro .hero { padding-top: 0; }
-  .results { display: grid; grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: 32px; align-items: start; }
-  .res-side { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); display: flex; flex-direction: column; gap: 18px; }
-  .res-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .intro { gap: 52px; }
+  .nav + .intro { margin-top: -40px; }
+  .hero { padding-top: 88px; gap: 26px; }
+  .results { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 36px; align-items: start; }
+  .res-side { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); }
   .toolbar { padding-top: 0; }
-  .guide { display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; row-gap: 16px; align-items: start; }
-  .guide > .eyebrow, .guide > h2, .guide > .tip:first-of-type { grid-column: 1 / -1; }
-  .guide > ol, .guide > .tip:nth-of-type(2) { grid-column: 1; }
-  .guide > .faq { grid-column: 2; grid-row: 4 / span 2; }
-  .faq details:first-child { border-top: 0; padding-top: 0; }
+  .guide ol { grid-template-columns: repeat(3, 1fr); }
+  .faq-sec { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 64px; align-items: start; }
+  .faq { border-top: 0; }
+  .faq details:first-child { border-top: 0; }
 }
 @media (min-width: 600px) and (max-width: 959px) {
   .wrap { max-width: 720px; }
+  .guide ol { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 959px) {
-  .results { gap: 18px; }
-}
+/* ---------- Móvil ---------- */
 @media (max-width: 600px) {
-  .wrap { gap: 40px; }
-  h1 { font-size: clamp(2.6rem, 13vw, 3.4rem); }
-  .lead { font-size: 1.02rem; }
-  .venn-card { padding: 14px 4px 4px; }
-  .region .num { font-size: 54px; }
+  .wrap { gap: 72px; }
+  .nav-links a:not(:last-child) { display: none; }
+  .nav + .intro { margin-top: -56px; }
+  .hero { padding-top: 40px; gap: 16px; }
+  .trust { display: none; }
+  .method-tab { flex-direction: column; gap: 0; min-height: 50px; }
+  .intro { gap: 32px; }
+  .trust { gap: 6px 16px; font-size: 0.84rem; }
+  .drop { padding: 24px 18px; gap: 20px; border-radius: 22px; }
+  .fast-steps li { padding-left: 42px; }
+  .bm, .open-ig.strong, .fast-steps .bm { width: 100%; min-height: 50px; }
+  .env-warn .bm, .env-warn .open-ig { width: 100%; }
+  .venn-card { padding: 16px 4px 6px; }
+  .region .num { font-size: 52px; }
   .region .lab { font-size: 14px; }
-  .venn .cap { font-size: 14px; }
+  .venn .cap { font-size: 13px; }
   .stats { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity; margin-inline: -16px; padding-inline: 16px; padding-bottom: 4px; scrollbar-width: none; }
   .stats::-webkit-scrollbar { display: none; }
   .stat { flex: none; scroll-snap-align: start; }
   .toolbar { gap: 8px 10px; }
-  .toolbar input[type="search"] { flex-basis: 100%; min-height: 44px; font-size: 16px; }
+  .toolbar input[type="search"] { flex-basis: 100%; min-height: 46px; font-size: 16px; }
   .toolbar button { flex: 1 1 auto; }
   .btns { width: 100%; }
-  .btns .primary { flex: 1 1 100%; min-height: 48px; }
-  .list { padding: 4px; border-radius: 16px; }
+  .btns .primary { flex: 1 1 100%; min-height: 50px; }
+  .list { padding: 4px; border-radius: 20px; }
   .list li { padding: 10px 8px; }
   .list input[type="checkbox"] { width: 20px; height: 20px; }
-  .res-head h2, .card h2 { font-size: 1.9rem; }
+  .list label span, .open { display: none; }
+  .list li + li:not(.empty)::before { left: 60px; }
+  .guide ol { gap: 8px; }
+  .guide ol li { flex-direction: row; gap: 14px; padding: 16px; border-radius: 16px; font-size: 0.92rem; }
+  .guide ol li::before { padding-top: 2px; }
 }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
 </head><body>
+<div class="bg-glow" aria-hidden="true"><i></i><i></i></div>
 
 <div class="wrap">
+  <nav class="nav" aria-label="Principal">
+    <a class="logo" href="./" aria-label="¿Quién no me sigue? Inicio">
+      <svg viewBox="0 0 30 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#3d5afe" stroke-width="2.2"/><circle cx="20" cy="10" r="8.5" fill="none" stroke="#ff2e6e" stroke-width="2.2"/></svg>
+      <span>quiennomesigue</span>
+    </a>
+    <div class="nav-links">
+      <a href="#guia">Con archivo</a>
+      <a href="#faq">Preguntas</a>
+    </div>
+  </nav>
+
   <div class="intro">
   <header class="hero">
-    <span class="eyebrow"><i></i>Gratis · Sin contraseña · Privado</span>
+    <span class="pill"><i></i>Gratis · Sin contraseña · Privado</span>
     <h1>¿Quién no me <em>sigue</em>?</h1>
-    <p class="lead">Descubre en un minuto quién no te devuelve el follow y quién te ha dejado de seguir. Sin contraseña. Nada sale de tu navegador.</p>
+    <p class="lead">Descubre en un minuto quién no te devuelve el follow en Instagram y quién te ha dejado de seguir.</p>
+    <ul class="trust">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Sin pedir contraseña</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/></svg>Nada sale de tu móvil</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Solo lectura</li>
+    </ul>
   </header>
 
   <div class="method">
   <div class="method-tabs" role="tablist" aria-label="Cómo quieres analizar tu cuenta">
-    <button type="button" class="method-tab" role="tab" data-method="fast" aria-selected="true">⚡ Rápido <small>1 minuto</small></button>
+    <button type="button" class="method-tab" role="tab" data-method="fast" aria-selected="true">⚡ Rápido <small>1 min</small></button>
     <button type="button" class="method-tab" role="tab" data-method="file" aria-selected="false">Con archivo <small>100% seguro</small></button>
   </div>
   <section class="drop fast" id="panel-fast" aria-labelledby="fast-title">
-    <h2 id="fast-title">Analiza tu cuenta al momento</h2>
+    <h2 id="fast-title" class="sr">Analiza tu cuenta al momento</h2>
     <div class="env-warn" id="env-warn" role="alert" hidden>
       <b id="env-title"></b>
       <span id="env-text"></span>
@@ -288,20 +352,20 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
         <b class="step-title">Entra en Instagram desde Safari</b>
         <span class="step-sub">En Safari, no en la app. Si ya tienes la sesión iniciada en Safari, pasa al paso 3.</span>
         <a class="open-ig strong" id="ig-open-ios" href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener">Abrir Instagram en Safari ↗</a>
-        <small class="muted">Funciona aunque hayas abierto esta web desde Telegram, WhatsApp o Instagram. ¿Aun así se abre la app de Instagram? Vuelve aquí, mantén pulsado el botón y elige <b>Abrir en una pestaña nueva</b>.</small>
+        <small class="muted">¿Se abre la app de Instagram? Vuelve aquí, mantén pulsado el botón y elige <b>Abrir en una pestaña nueva</b>.</small>
       </li>
       <li>
         <b class="step-title">Pulsa Compartir y elige el atajo</b>
-        <span class="step-sub">En instagram.com, pulsa <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M5 11v9h14v-9"/></svg> y busca esta fila (suele estar al final: desliza hacia abajo):</span>
+        <span class="step-sub">En instagram.com, pulsa <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M5 11v9h14v-9"/></svg> y busca esta fila (suele estar al final):</span>
         <span class="share-mock" aria-hidden="true"><span class="share-ico">⚡</span>¿Quién no me sigue?</span>
-        <small class="tip-pin"><b>Truco para la próxima vez:</b> en Compartir, baja hasta <b>Editar acciones…</b> y pulsa <b>⊕</b> junto a «¿Quién no me sigue?». Saldrá el primero y te bastarán 2 toques.</small>
-        <span class="step-sub">La primera vez pulsa <b>Permitir</b>. Aparece un panel: <b>no cierres Safari</b> mientras lee (menos de un minuto) y al terminar pulsa <b>Ver resultados</b>.</span>
+        <span class="step-sub">La primera vez pulsa <b>Permitir</b>. <b>No cierres Safari</b> mientras lee (menos de un minuto) y al terminar pulsa <b>Ver resultados</b>.</span>
+        <small class="tip-pin"><b>Truco:</b> en Compartir, baja hasta <b>Editar acciones…</b> y pulsa <b>⊕</b> junto a «¿Quién no me sigue?». Saldrá el primero la próxima vez.</small>
       </li>
     </ol>
     <details class="ios-help" id="ios-help" hidden>
       <summary>¿Algo no funciona?</summary>
       <p><b>No recuerdo mi contraseña de Instagram.</b> En la pantalla de inicio de sesión pulsa <i>¿Has olvidado tu contraseña?</i> y te llegará un código por SMS o correo. No hace falta salir de Safari.</p>
-      <p><b>No me sale el atajo en Compartir.</b> Mira la barra de arriba: tienes que estar en <b>Safari</b>, no dentro de Telegram, WhatsApp o Instagram. Usa el botón del paso 2, que abre Instagram directamente en Safari.</p>
+      <p><b>No me sale el atajo en Compartir.</b> Tienes que estar en <b>Safari</b>, no dentro de Telegram, WhatsApp o Instagram. Usa el botón del paso 2, que abre Instagram directamente en Safari.</p>
       <p><b>No veo el atajo en Compartir.</b> Desliza hacia abajo hasta el final de la lista (y fíjalo con <b>Editar acciones…</b> para tenerlo arriba). Si no está, vuelve a pulsar <b>Instalar atajo</b> en el paso 1.</p>
       <p><b>Sale un error de «ejecutar scripts».</b> Ve a Ajustes → Apps → Atajos → Avanzado y activa <b>Permitir ejecutar scripts</b>.</p>
       <p><b>Se queda parado o da error.</b> Espera unos minutos y vuelve a probar. Si sigue igual, usa la pestaña <b>Con archivo</b>: tarda más, pero funciona siempre.</p>
@@ -318,13 +382,13 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
         <b class="step-title">Entra en Instagram desde Chrome</b>
         <span class="step-sub">En Chrome, no en la app. Si ya tienes la sesión iniciada en Chrome, pasa al paso 3.</span>
         <a class="open-ig strong" id="ig-open-android" href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener">Abrir Instagram en Chrome ↗</a>
-        <small class="muted">Funciona aunque hayas abierto esta web desde Telegram, WhatsApp o Instagram. ¿Aun así se abre la app de Instagram? Vuelve aquí, mantén pulsado el botón y elige <b>Abrir en una pestaña nueva</b>.</small>
+        <small class="muted">¿Se abre la app de Instagram? Vuelve aquí, mantén pulsado el botón y elige <b>Abrir en una pestaña nueva</b>.</small>
       </li>
       <li>
         <b class="step-title">Escribe qnms en la barra de direcciones</b>
-        <span class="step-sub">En instagram.com, toca la barra de direcciones, escribe <b>qnms</b> y toca el resultado que tiene la estrella (no el de la lupa):</span>
+        <span class="step-sub">En instagram.com, toca la barra de direcciones, escribe <b>qnms</b> y toca el resultado con la estrella (no el de la lupa):</span>
         <span class="share-mock" aria-hidden="true"><span class="share-ico">☆</span>qnms</span>
-        <span class="step-sub">Aparece un panel: <b>no cierres Chrome</b> mientras lee (menos de un minuto) y al terminar pulsa <b>Ver resultados</b>.</span>
+        <span class="step-sub"><b>No cierres Chrome</b> mientras lee (menos de un minuto) y al terminar pulsa <b>Ver resultados</b>.</span>
       </li>
     </ol>
     <details class="ios-help" id="and-help" hidden>
@@ -335,22 +399,22 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
       <p><b>No uso Chrome o sigue sin ir.</b> Usa la pestaña <b>Con archivo</b>: tarda más, pero funciona en cualquier móvil.</p>
     </details>
     <ol class="fast-steps" id="fast-desktop">
-      <li><span>Arrastra este botón a tu barra de marcadores:</span>
+      <li><b class="step-title">Arrastra este botón a tu barra de marcadores</b>
         <a class="bm" id="bm-link" href="#" draggable="true">⚡ ¿Quién no me sigue?</a>
         <small class="muted" id="bm-hint">¿No ves la barra? Pulsa <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>B</kbd> en Mac o <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>B</kbd> en Windows. <button type="button" class="link" id="bm-copy">Copiar código</button></small>
       </li>
-      <li><span>Abre <a href="https://www.instagram.com/" target="_blank" rel="noopener">instagram.com</a> con tu sesión iniciada y pulsa el marcador.</span></li>
-      <li><span>Cuando termine, pulsa <b>Ver resultados</b> y aparecerán aquí.</span></li>
+      <li><b class="step-title">Abre Instagram y pulsa el marcador</b><span class="step-sub">Entra en <a href="https://www.instagram.com/" target="_blank" rel="noopener">instagram.com</a> con tu sesión iniciada.</span></li>
+      <li><b class="step-title">Pulsa Ver resultados</b><span class="step-sub">Cuando termine de leer, tus listas aparecerán aquí.</span></li>
     </ol>
-    <p class="fine">Usa tu propia sesión: no pedimos tu contraseña y solo lee las listas, nunca sigue ni deja de seguir a nadie. Va despacio para no saturar, pero Instagram no permite oficialmente estas herramientas y podría limitar temporalmente tu cuenta. Si prefieres cero riesgo, usa la opción con archivo.</p>
+    <p class="fine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>Usa tu propia sesión: no pedimos tu contraseña y solo lee las listas, nunca sigue ni deja de seguir a nadie. Va despacio para no saturar, pero Instagram no permite oficialmente estas herramientas y podría limitar temporalmente tu cuenta. Si prefieres cero riesgo, usa la opción con archivo.</span></p>
   </section>
   <section class="drop" id="drop" aria-labelledby="drop-title" hidden>
     <span class="drop-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span>
     <h2 id="drop-title">Analiza tu cuenta con el archivo oficial</h2>
     <ol class="fast-steps">
-      <li><span>Pide tus datos a Instagram. Marca solo <b>Seguidores y seguidos</b>, formato <b>JSON</b> y <b>Desde el principio</b>. Suele tardar unos minutos.</span>
+      <li><b class="step-title">Pide tus datos a Instagram</b><span class="step-sub">Marca solo <b>Seguidores y seguidos</b>, formato <b>JSON</b> y <b>Desde el principio</b>. Suele tardar unos minutos.</span>
         <a class="open-ig" href="https://accountscenter.instagram.com/info_and_permissions/dyi/" target="_blank" rel="noopener">Pedir mis datos ↗</a></li>
-      <li><span>Cuando te avisen, descarga el <code>.zip</code> y súbelo aquí tal cual (en el móvil, desde la app Archivos). En el ordenador también puedes arrastrarlo.</span></li>
+      <li><b class="step-title">Sube el .zip tal cual</b><span class="step-sub">Cuando te avisen, descárgalo y elígelo aquí (en el móvil, desde la app Archivos). En el ordenador también puedes arrastrarlo.</span></li>
     </ol>
     <div class="btns">
       <button class="primary" id="pick" type="button">Elegir archivo</button>
@@ -377,6 +441,10 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
     <div class="notice history" id="history-note" hidden></div>
     <div class="venn-card">
       <svg class="venn" viewBox="0 0 420 250" role="group" aria-label="Resumen: te siguen, mutuos y no te siguen de vuelta">
+        <defs>
+          <radialGradient id="ga" cx="35%" cy="40%" r="75%"><stop offset="0" style="stop-color:var(--blue);stop-opacity:.22"/><stop offset="1" style="stop-color:var(--blue);stop-opacity:.06"/></radialGradient>
+          <radialGradient id="gb" cx="65%" cy="40%" r="75%"><stop offset="0" style="stop-color:var(--hot);stop-opacity:.2"/><stop offset="1" style="stop-color:var(--hot);stop-opacity:.05"/></radialGradient>
+        </defs>
         <text class="cap" x="120" y="16" text-anchor="middle">Te siguen</text>
         <text class="cap" x="300" y="16" text-anchor="middle">Sigues</text>
         <circle class="c-a" cx="160" cy="135" r="105"></circle>
@@ -385,19 +453,19 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
           <rect class="hit" x="55" y="40" width="100" height="190"></rect>
           <text class="num" id="v-fans" x="103" y="140" text-anchor="middle">0</text>
           <text class="lab" x="103" y="164" text-anchor="middle">no les sigues</text>
-          <rect class="bar" x="83" y="174" width="40" height="3" rx="1.5" fill="var(--blue)"></rect>
+          <rect class="bar" x="83" y="174" width="40" height="3" rx="1.5" style="fill:var(--blue)"></rect>
         </g>
         <g class="region r-mutual" data-tab="mutual" role="button" tabindex="0" aria-pressed="false">
           <rect class="hit" x="160" y="50" width="100" height="170"></rect>
           <text class="num" id="v-mutual" x="210" y="140" text-anchor="middle">0</text>
           <text class="lab" x="210" y="164" text-anchor="middle">mutuos</text>
-          <rect class="bar" x="190" y="174" width="40" height="3" rx="1.5" fill="var(--ink)"></rect>
+          <rect class="bar" x="190" y="174" width="40" height="3" rx="1.5" style="fill:var(--ink)"></rect>
         </g>
         <g class="region r-no" data-tab="no" role="button" tabindex="0" aria-pressed="false">
           <rect class="hit" x="265" y="40" width="100" height="190"></rect>
           <text class="num" id="v-no" x="317" y="140" text-anchor="middle">0</text>
           <text class="lab" x="317" y="164" text-anchor="middle">no te siguen</text>
-          <rect class="bar" x="297" y="174" width="40" height="3" rx="1.5" fill="var(--hot)"></rect>
+          <rect class="bar" x="297" y="174" width="40" height="3" rx="1.5" style="fill:var(--hot)"></rect>
         </g>
       </svg>
     </div>
@@ -426,19 +494,28 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
     </div>
   </section>
 
-  <section class="card guide" id="guia" aria-labelledby="guide-title">
-    <span class="eyebrow">Opción con archivo</span>
-    <h2 id="guide-title">Cómo pedir tu archivo a Instagram</h2>
-    <p class="tip">Es la forma oficial y segura. Instagram prepara un archivo con tus seguidores y seguidos; si eliges solo «Seguidores y seguidos» suele estar listo en pocos minutos.</p>
+  <section class="guide" id="guia" aria-labelledby="guide-title">
+    <div class="section-head">
+      <span class="eyebrow">Opción con archivo</span>
+      <h2 id="guide-title">Cómo pedir tu archivo a Instagram</h2>
+      <p>Es la forma oficial y sin riesgo. Si eliges solo «Seguidores y seguidos», suele estar listo en pocos minutos.</p>
+    </div>
     <ol>
-      <li>Abre Instagram y ve a tu <span class="path">Perfil → menú ☰ → Centro de cuentas</span>.</li>
-      <li>Entra en <span class="path">Tu información y permisos → Exportar tu información</span> (en algunas versiones se llama <span class="path">Descargar tu información</span>).</li>
-      <li>Pulsa <span class="path">Crear exportación</span>, elige tu cuenta de Instagram y después <span class="path">Exportar al dispositivo</span>.</li>
-      <li>En <span class="path">Personalizar información</span> desmarca todo y deja solo <span class="path">Seguidores y seguidos</span>. El archivo será pequeño y llegará antes.</li>
-      <li>Muy importante: en <span class="path">Formato</span> elige <span class="path">JSON</span> y en <span class="path">Intervalo de fechas</span> elige <span class="path">Desde el principio</span>.</li>
-      <li>Pulsa <span class="path">Iniciar exportación</span>. Cuando esté lista te llegará un aviso o un correo. Descarga el <code>.zip</code> y súbelo aquí arriba.</li>
+      <li><span>Abre Instagram y ve a tu <span class="path">Perfil → menú ☰ → Centro de cuentas</span>.</span></li>
+      <li><span>Entra en <span class="path">Tu información y permisos → Exportar tu información</span> (a veces se llama <span class="path">Descargar tu información</span>).</span></li>
+      <li><span>Pulsa <span class="path">Crear exportación</span>, elige tu cuenta de Instagram y después <span class="path">Exportar al dispositivo</span>.</span></li>
+      <li><span>En <span class="path">Personalizar información</span> desmarca todo y deja solo <span class="path">Seguidores y seguidos</span>.</span></li>
+      <li><span>Muy importante: <span class="path">Formato → JSON</span> e <span class="path">Intervalo de fechas → Desde el principio</span>.</span></li>
+      <li><span>Pulsa <span class="path">Iniciar exportación</span>. Cuando te avisen, descarga el <code>.zip</code> y súbelo arriba.</span></li>
     </ol>
-    <p class="tip">Atajo desde el ordenador: <a href="https://accountscenter.instagram.com/info_and_permissions/dyi/" target="_blank" rel="noopener">accountscenter.instagram.com/info_and_permissions/dyi</a></p>
+    <p class="tip">Desde el ordenador: <a href="https://accountscenter.instagram.com/info_and_permissions/dyi/" target="_blank" rel="noopener">accountscenter.instagram.com/info_and_permissions/dyi</a></p>
+  </section>
+
+  <section class="faq-sec" id="faq" aria-labelledby="faq-title">
+    <div class="section-head">
+      <span class="eyebrow">Preguntas</span>
+      <h2 id="faq-title">Lo que más nos preguntan</h2>
+    </div>
     <div class="faq">
     <details>
       <summary>¿Cómo sé quién me ha dejado de seguir?</summary>
@@ -463,12 +540,13 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
     </details>
     <details>
       <summary>Alguien aparece en la lista pero sí me sigue</summary>
-      <p>Los datos son del momento en que pediste la exportación. Si alguien te siguió después o cambió su nombre de usuario, no coincidirá. Las cuentas desactivadas también pueden aparecer.</p>
+      <p>Los datos son del momento en que pediste la exportación o hiciste el análisis. Si alguien te siguió después o cambió su nombre de usuario, no coincidirá. Las cuentas desactivadas también pueden aparecer.</p>
     </details>
     </div>
   </section>
 
   <footer>
+    <svg viewBox="0 0 30 20" width="30" height="20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#3d5afe" stroke-width="2.2"/><circle cx="20" cy="10" r="8.5" fill="none" stroke="#ff2e6e" stroke-width="2.2"/></svg>
     <span>Gratis y sin ánimo de lucro. No afiliado a Instagram ni a Meta.</span>
   </footer>
 </div>
