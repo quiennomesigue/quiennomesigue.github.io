@@ -361,7 +361,7 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
     <div class="faq">
     <details>
       <summary>¿Cómo sé quién me ha dejado de seguir?</summary>
-      <p>Instagram no lo indica en sus datos, así que lo calculamos nosotros: cada vez que subes un archivo guardamos un resumen en tu navegador. La próxima vez que subas una exportación nueva, la comparamos con la anterior y te mostramos quién se fue y quién llegó. Repite la exportación cada semana o cada mes.</p>
+      <p>Instagram no lo indica en sus datos, así que lo calculamos nosotros: cada vez que analizas tu cuenta guardamos un resumen en tu navegador. La próxima vez que analices tu cuenta (con el modo rápido o con un archivo nuevo), la comparamos con la anterior y te mostramos quién se fue y quién llegó. Repítelo cada semana o cada mes. En navegación privada no se guarda nada.</p>
     </details>
     <details>
       <summary>¿Qué diferencia hay entre el modo rápido y el archivo?</summary>
@@ -622,7 +622,7 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
       p.textContent = state.lost.size + " " + (state.lost.size === 1 ? "cuenta te ha dejado" : "cuentas te han dejado") + " de seguir y tienes " + state.gained.size + " " + (state.gained.size === 1 ? "seguidor nuevo." : "seguidores nuevos.");
       hn.appendChild(b); hn.appendChild(p);
     } else if (!state.sample && state.prevDate === null && $("remember").checked) {
-      hn.hidden = false; hn.textContent = "Primer análisis guardado. Sube una exportación nueva dentro de unos días y te diremos quién te ha dejado de seguir.";
+      hn.hidden = false; hn.textContent = "Primer análisis guardado. Vuelve a analizar tu cuenta dentro de unos días y te diremos quién te ha dejado de seguir.";
     } else hn.hidden = true;
     $("clear").hidden = !history().length;
     $("tabdesc").textContent = TABS[state.tab].desc;
@@ -797,7 +797,7 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
   }
   document.querySelectorAll(".method-tab").forEach(function (b) { b.addEventListener("click", function () { setMethod(b.dataset.method); }); });
   // Enlace de iCloud del atajo de iPhone (vacío hasta que esté publicado)
-  var SHORTCUT_URL = "";
+  var SHORTCUT_URL = "https://www.icloud.com/shortcuts/ca8ec8603241451eb57c47d25967aa51";
   var ua = navigator.userAgent;
   var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   var isAndroid = /Android/.test(ua);
