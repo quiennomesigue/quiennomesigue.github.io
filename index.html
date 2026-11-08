@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>¿Quién no me sigue?</title>
+<title>¿Quién no me sigue en Instagram? Gratis y sin contraseña</title>
+<link rel="canonical" href="https://quiennomesigue.github.io/">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Descubre quién no te sigue de vuelta en Instagram y quién te ha dejado de seguir. Gratis, sin contraseñas: tus datos no salen de tu navegador.">
 <meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
@@ -18,6 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="¿Quién no me sigue? Diagrama de quién te sigue, mutuos y quién no te sigue.">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "¿Quién no me sigue?", "url": "https://quiennomesigue.github.io/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "iOS, Android, Windows, macOS", "inLanguage": "es", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "description": "Descubre quién no te sigue de vuelta en Instagram y quién te ha dejado de seguir. Gratis y sin contraseña."}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cómo puedo ver quién no me sigue en Instagram?", "acceptedAnswer": {"@type": "Answer", "text": "Entra en quiennomesigue.github.io desde el navegador de tu móvil u ordenador y sigue los pasos del modo rápido (1 minuto) o sube el archivo oficial de datos que te da Instagram. Verás la lista de cuentas que sigues y que no te siguen de vuelta."}}, {"@type": "Question", "name": "¿Hace falta dar mi contraseña?", "acceptedAnswer": {"@type": "Answer", "text": "No. La herramienta nunca pide tu usuario ni tu contraseña. Usa tu propia sesión de Instagram en el navegador o el archivo oficial de exportación."}}, {"@type": "Question", "name": "¿Es gratis?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, es totalmente gratis, sin anuncios ni registro."}}, {"@type": "Question", "name": "¿Puedo saber quién me ha dejado de seguir?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Cada análisis se guarda en tu navegador y, la próxima vez que analices tu cuenta, te mostramos quién te ha dejado de seguir y quién te ha empezado a seguir."}}, {"@type": "Question", "name": "¿Mis datos se envían a algún servidor?", "acceptedAnswer": {"@type": "Answer", "text": "No. Todo se procesa dentro de tu navegador y nada de tu cuenta llega a ningún servidor."}}]}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -245,6 +247,13 @@ details p b { color: var(--ink); font-weight: 600; }
 .faq-sec { display: flex; flex-direction: column; gap: 24px; scroll-margin-top: 16px; }
 .faq { border-bottom: 1px solid var(--line); }
 footer { display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--muted); font-size: 0.82rem; text-align: center; border-top: 1px solid var(--line); padding-top: 32px; margin-top: -32px; }
+
+.share { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; padding: 40px 22px; border-radius: var(--r); border: 1px solid var(--line); background: radial-gradient(120% 140% at 0% 0%, var(--glow-a), transparent 60%), radial-gradient(120% 140% at 100% 100%, var(--glow-b), transparent 60%), var(--surface); box-shadow: var(--shadow); }
+.share h2 { font-weight: 700; font-size: clamp(1.7rem, 5vw, 2.3rem); letter-spacing: -0.045em; line-height: 1.05; }
+.share p { color: var(--muted); max-width: 44ch; }
+.share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.share-row a { min-height: 44px; }
+@media (max-width: 600px) { .share-row > .bm { flex: 1 1 100%; } .share-row > a.open-ig { flex: 1 1 0; padding-inline: 8px; } }
 
 /* ---------- Escritorio ---------- */
 @media (min-width: 960px) {
@@ -491,6 +500,18 @@ footer { display: flex; flex-direction: column; align-items: center; gap: 12px; 
       <span>Los perfiles marcados como revisados se recuerdan en este navegador.</span>
       <button type="button" class="link" id="clear" hidden>Borrar historial guardado</button>
     </div>
+    </div>
+  </section>
+
+  <section class="share" id="compartir" aria-labelledby="share-title">
+    <span class="eyebrow">Pásalo</span>
+    <h2 id="share-title">¿Te ha servido? Compártelo</h2>
+    <p>Es gratis y sin contraseñas. Ayúdanos a que llegue a más gente enviándolo a tus amigos o a tus grupos.</p>
+    <div class="share-row">
+      <button type="button" class="bm" id="share-btn">Compartir la web</button>
+      <a class="open-ig" id="share-wa" href="https://wa.me/?text=%C2%BFQui%C3%A9n%20no%20te%20sigue%20en%20Instagram%3F%20M%C3%ADralo%20gratis%20y%20sin%20contrase%C3%B1a%3A%20https%3A%2F%2Fquiennomesigue.github.io%2F" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="open-ig" id="share-tg" href="https://t.me/share/url?url=https%3A%2F%2Fquiennomesigue.github.io%2F&amp;text=%C2%BFQui%C3%A9n%20no%20te%20sigue%20en%20Instagram%3F%20M%C3%ADralo%20gratis%20y%20sin%20contrase%C3%B1a" target="_blank" rel="noopener">Telegram</a>
+      <a class="open-ig" id="share-x" href="https://x.com/intent/post?text=%C2%BFQui%C3%A9n%20no%20te%20sigue%20en%20Instagram%3F%20M%C3%ADralo%20gratis%20y%20sin%20contrase%C3%B1a&amp;url=https%3A%2F%2Fquiennomesigue.github.io%2F" target="_blank" rel="noopener">X</a>
     </div>
   </section>
 
@@ -1047,6 +1068,20 @@ footer { display: flex; flex-direction: column; align-items: center; gap: 12px; 
   });
 
   loadSample();
+})();
+
+(function () {
+  var URL_WEB = "https://quiennomesigue.github.io/", TXT = "¿Quién no te sigue en Instagram? Míralo gratis y sin contraseña:";
+  function track(n) { try { if (window.goatcounter && goatcounter.count) goatcounter.count({ path: "compartir-" + n, title: "Compartir " + n, event: true }); } catch (e) {} }
+  var btn = document.getElementById("share-btn");
+  btn.addEventListener("click", function () {
+    track("boton");
+    if (navigator.share) { navigator.share({ title: "¿Quién no me sigue?", text: TXT, url: URL_WEB }).catch(function () {}); return; }
+    var done = function () { btn.textContent = "Enlace copiado ✓"; setTimeout(function () { btn.textContent = "Compartir la web"; }, 2500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(TXT + " " + URL_WEB).then(done, function () { location.href = document.getElementById("share-wa").href; });
+    else location.href = document.getElementById("share-wa").href;
+  });
+  ["wa", "tg", "x"].forEach(function (k) { document.getElementById("share-" + k).addEventListener("click", function () { track(k); }); });
 })();
 </script>
 <!-- Contador de visitas anónimo: sin cookies, sin datos personales y sin enviar nada de Instagram -->
