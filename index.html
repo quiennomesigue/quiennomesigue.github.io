@@ -201,6 +201,8 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
 .share-ico { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: linear-gradient(135deg, var(--blue), var(--hot)); color: #fff; font-size: 0.95rem; }
 .tip-pin { display: block; max-width: 420px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--blue) 8%, var(--surface)); color: var(--muted); font-size: 0.86rem; line-height: 1.45; }
 .tip-pin b { color: var(--ink); }
+.env-warn { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; padding: 16px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--hot) 45%, var(--line)); background: color-mix(in srgb, var(--hot) 8%, var(--surface)); font-size: 0.95rem; }
+.env-warn b { font-size: 1.02rem; }
 .ios-help { width: 100%; }
 .ios-help p b { color: var(--ink); }
 
@@ -269,6 +271,11 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
   </div>
   <section class="drop fast" id="panel-fast" aria-labelledby="fast-title">
     <h2 id="fast-title">Analiza tu cuenta al momento</h2>
+    <div class="env-warn" id="env-warn" role="alert" hidden>
+      <b id="env-title"></b>
+      <span id="env-text"></span>
+      <button type="button" class="bm" id="env-copy">Copiar enlace de la web</button>
+    </div>
     <ol class="fast-steps ios-steps" id="fast-ios" hidden>
       <li id="ios-step-install">
         <b class="step-title">Instala el atajo</b>
@@ -293,6 +300,7 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
     <details class="ios-help" id="ios-help" hidden>
       <summary>¿Algo no funciona?</summary>
       <p><b>No recuerdo mi contraseña de Instagram.</b> En la pantalla de inicio de sesión pulsa <i>¿Has olvidado tu contraseña?</i> y te llegará un código por SMS o correo. No hace falta salir de Safari.</p>
+      <p><b>Abrí la web desde WhatsApp u otra app.</b> Toca el icono de la brújula o «Abrir en Safari» para abrirla en Safari de verdad. Dentro de otras apps el atajo no funciona.</p>
       <p><b>No veo el atajo en Compartir.</b> Desliza hacia abajo hasta el final de la lista (y fíjalo con <b>Editar acciones…</b> para tenerlo arriba). Si no está, vuelve a pulsar <b>Instalar atajo</b> en el paso 1.</p>
       <p><b>Sale un error de «ejecutar scripts».</b> Ve a Ajustes → Apps → Atajos → Avanzado y activa <b>Permitir ejecutar scripts</b>.</p>
       <p><b>Se queda parado o da error.</b> Espera unos minutos y vuelve a probar. Si sigue igual, usa la pestaña <b>Con archivo</b>: tarda más, pero funciona siempre.</p>
@@ -878,6 +886,25 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
   $("fast-ios").hidden = device !== "ios";
   $("fast-android").hidden = device !== "android";
   $("ios-help").hidden = device !== "ios";
+  // Navegadores donde el modo rápido no funciona: lo decimos antes de que el usuario se atasque
+  var inApp = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Line\/|Twitter|TikTok|musical_ly|BytedanceWebview|Snapchat|LinkedInApp|Pinterest|; wv\)/.test(ua);
+  var iosOther = isIOS && /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|GSA\/|DuckDuckGo|YaBrowser|Brave/.test(ua);
+  var androidOther = isAndroid && !inApp && /SamsungBrowser|Firefox|OPR\/|EdgA|YaBrowser|MiuiBrowser|HuaweiBrowser/.test(ua);
+  var envWarn = inApp ? ["Estás dentro de otra app", isIOS
+      ? "Esta web está abierta dentro de una app (Instagram, TikTok…) y así el atajo no aparece. Toca el menú ••• arriba a la derecha y elige «Abrir en Safari» (o «Abrir en el navegador»), o copia el enlace y pégalo en Safari."
+      : "Esta web está abierta dentro de una app (Instagram, TikTok…) y así no funciona. Toca ⋮ arriba a la derecha y elige «Abrir en Chrome», o copia el enlace y pégalo en Chrome."]
+    : iosOther ? ["Ábrela en Safari", "En iPhone el atajo solo aparece en Safari. Copia el enlace, abre Safari y pégalo en la barra de direcciones."]
+    : androidOther ? ["Mejor en Chrome", "Estos pasos están pensados para Chrome. Si no lo consigues aquí, copia el enlace y ábrelo en Chrome."]
+    : null;
+  if (envWarn) {
+    $("env-warn").hidden = false; $("env-title").textContent = envWarn[0]; $("env-text").textContent = envWarn[1];
+    $("env-copy").addEventListener("click", function () {
+      var btn = $("env-copy"), url = "https://davcrelib.github.io/quien-no-me-sigue/";
+      var ok = function () { flash(btn, "Enlace copiado ✓", "Copiar enlace de la web"); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { prompt("Copia este enlace:", url); });
+      else prompt("Copia este enlace:", url);
+    });
+  }
   $("and-help").hidden = device !== "android";
   // Quien ya instaló el atajo ve el paso 1 marcado como hecho
   var INSTALLED_KEY = "qnms-atajo";
