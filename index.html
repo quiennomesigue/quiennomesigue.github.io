@@ -184,6 +184,8 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
 .ios-steps li.done::before { content: "✓"; background: color-mix(in srgb, #1aa36b 16%, var(--surface)); color: #1aa36b; }
 .share-mock { display: flex; align-items: center; gap: 12px; width: 100%; max-width: 320px; padding: 10px 14px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); font-weight: 500; }
 .share-ico { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: linear-gradient(135deg, var(--blue), var(--hot)); color: #fff; font-size: 0.95rem; }
+.tip-pin { display: block; max-width: 420px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--blue) 8%, var(--surface)); color: var(--muted); font-size: 0.86rem; line-height: 1.45; }
+.tip-pin b { color: var(--ink); }
 .ios-help { width: 100%; }
 .ios-help p b { color: var(--ink); }
 
@@ -269,13 +271,14 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
         <b class="step-title">Pulsa Compartir y elige el atajo</b>
         <span class="step-sub">En instagram.com, pulsa <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M5 11v9h14v-9"/></svg> y busca esta fila (suele estar al final: desliza hacia abajo):</span>
         <span class="share-mock" aria-hidden="true"><span class="share-ico">⚡</span>¿Quién no me sigue?</span>
+        <small class="tip-pin"><b>Truco para la próxima vez:</b> en Compartir, baja hasta <b>Editar acciones…</b> y pulsa <b>⊕</b> junto a «¿Quién no me sigue?». Saldrá el primero y te bastarán 2 toques.</small>
         <span class="step-sub">La primera vez pulsa <b>Permitir</b>. Aparece un panel: <b>no cierres Safari</b> mientras lee (menos de un minuto) y al terminar pulsa <b>Ver resultados</b>.</span>
       </li>
     </ol>
     <details class="ios-help" id="ios-help" hidden>
       <summary>¿Algo no funciona?</summary>
       <p><b>No recuerdo mi contraseña de Instagram.</b> En la pantalla de inicio de sesión pulsa <i>¿Has olvidado tu contraseña?</i> y te llegará un código por SMS o correo. No hace falta salir de Safari.</p>
-      <p><b>No veo el atajo en Compartir.</b> Desliza hacia abajo hasta el final de la lista. Si no está, vuelve a pulsar <b>Instalar atajo</b> en el paso 1.</p>
+      <p><b>No veo el atajo en Compartir.</b> Desliza hacia abajo hasta el final de la lista (y fíjalo con <b>Editar acciones…</b> para tenerlo arriba). Si no está, vuelve a pulsar <b>Instalar atajo</b> en el paso 1.</p>
       <p><b>Sale un error de «ejecutar scripts».</b> Ve a Ajustes → Apps → Atajos → Avanzado y activa <b>Permitir ejecutar scripts</b>.</p>
       <p><b>Se queda parado o da error.</b> Espera unos minutos y vuelve a probar. Si sigue igual, usa la pestaña <b>Con archivo</b>: tarda más, pero funciona siempre.</p>
     </details>
