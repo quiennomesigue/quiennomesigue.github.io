@@ -7,7 +7,7 @@ const { execSync } = require("child_process");
 const path = require("path");
 const root = path.join(__dirname, "..");
 const src = path.join(root, "src/bookmarklet.js");
-const SITE = "https://davcrelib.github.io/quien-no-me-sigue/";
+const SITE = "https://quiennomesigue.github.io/";
 let code;
 try {
   code = execSync(`npx --yes terser@5.31.0 "${src}" --compress --mangle`, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();

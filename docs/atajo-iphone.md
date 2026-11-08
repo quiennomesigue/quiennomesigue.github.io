@@ -12,7 +12,7 @@ Ajustes → Apps → Atajos → Avanzado → activa **Permitir ejecutar scripts*
 2. Ponle de nombre **¿Quién no me sigue?** (y si quieres, un icono y un color).
 3. Añade la acción **Ejecutar JavaScript en la página web** y, en ella, toca «Página web» y elige **Entrada del atajo**.
 4. Arriba aparece «Recibir … de …»: toca el destino y activa **Hoja para compartir**; toca el tipo, pulsa **Borrar** y marca solo **Páginas web de Safari**.
-5. Borra el código de ejemplo y pega el contenido de [`src/atajo.js`](../src/atajo.js). En el iPhone, abre https://raw.githubusercontent.com/davcrelib/quien-no-me-sigue/main/src/atajo.js, selecciona todo y copia.
+5. Borra el código de ejemplo y pega el contenido de [`src/atajo.js`](../src/atajo.js). En el iPhone, abre https://raw.githubusercontent.com/quiennomesigue/quiennomesigue.github.io/main/src/atajo.js, selecciona todo y copia.
 6. No hace falta ninguna acción más (si añadiste «Abrir URL», bórrala). Guarda.
 
 > Atajos corta la acción de JavaScript a los pocos segundos, así que el código solo arranca el proceso dentro de la página y termina al momento. La lectura sigue en Safari.
