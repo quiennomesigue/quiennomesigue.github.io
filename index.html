@@ -12,8 +12,8 @@
 <meta property="og:site_name" content="¿Quién no me sigue?">
 <meta property="og:title" content="¿Quién no me sigue? · Descubre quién no te sigue de vuelta en Instagram">
 <meta property="og:description" content="Gratis y en 1 minuto. Sin contraseñas: tus datos no salen de tu navegador.">
-<meta property="og:url" content="https://davcrelib.github.io/quien-no-me-sigue/">
-<meta property="og:image" content="https://davcrelib.github.io/quien-no-me-sigue/assets/og.png">
+<meta property="og:url" content="https://quiennomesigue.github.io/">
+<meta property="og:image" content="https://quiennomesigue.github.io/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="¿Quién no me sigue? Diagrama de quién te sigue, mutuos y quién no te sigue.">
@@ -917,11 +917,11 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
     : null;
   if (envWarn) {
     $("env-warn").hidden = false; $("env-title").textContent = envWarn[0]; $("env-text").textContent = envWarn[1];
-    var SITE_HOME = "https://davcrelib.github.io/quien-no-me-sigue/";
+    var SITE_HOME = "https://quiennomesigue.github.io/";
     if (isIOS && iosMajor >= 17) { $("env-open").href = "x-safari-" + SITE_HOME; $("env-open").hidden = false; }
-    else if (isAndroid) { $("env-open").href = "intent://davcrelib.github.io/quien-no-me-sigue/#Intent;scheme=https;package=com.android.chrome;end"; $("env-open").textContent = "Abrir esta web en Chrome"; $("env-open").hidden = false; }
+    else if (isAndroid) { $("env-open").href = "intent://quiennomesigue.github.io/#Intent;scheme=https;package=com.android.chrome;end"; $("env-open").textContent = "Abrir esta web en Chrome"; $("env-open").hidden = false; }
     $("env-copy").addEventListener("click", function () {
-      var btn = $("env-copy"), url = "https://davcrelib.github.io/quien-no-me-sigue/";
+      var btn = $("env-copy"), url = "https://quiennomesigue.github.io/";
       var ok = function () { flash(btn, "Enlace copiado ✓", "Copiar enlace de la web"); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { prompt("Copia este enlace:", url); });
       else prompt("Copia este enlace:", url);
@@ -946,7 +946,7 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
   setMethod(device === "ios" && !SHORTCUT_URL ? "file" : "fast");
 
   // Marcador: la URL de esta web se inserta en el código para que sepa adónde volver
-  var SITE_URL = (/^https:/.test(location.protocol) && !/claude/.test(location.hostname)) || location.hostname === "localhost" ? location.origin + location.pathname : "https://davcrelib.github.io/quien-no-me-sigue/";
+  var SITE_URL = (/^https:/.test(location.protocol) && !/claude/.test(location.hostname)) || location.hostname === "localhost" ? location.origin + location.pathname : "https://quiennomesigue.github.io/";
   var bmCode = "javascript:" + encodeURIComponent($("bm-src").textContent.replace("__SITE__", SITE_URL).trim());
   $("bm-link").setAttribute("href", bmCode);
   $("bm-link").addEventListener("click", function (e) { e.preventDefault(); $("bm-hint").textContent = "No lo pulses aquí: arrástralo a tu barra de marcadores y púlsalo cuando estés en instagram.com."; });

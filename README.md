@@ -2,7 +2,7 @@
 
 Herramienta web gratuita para ver quién no te sigue de vuelta en Instagram, quién te ha dejado de seguir y tus seguidores mutuos.
 
-**Pruébala:** https://davcrelib.github.io/quien-no-me-sigue/
+**Pruébala:** https://quiennomesigue.github.io/
 
 ## Dos formas de usarla
 
