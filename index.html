@@ -274,7 +274,8 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
     <div class="env-warn" id="env-warn" role="alert" hidden>
       <b id="env-title"></b>
       <span id="env-text"></span>
-      <button type="button" class="bm" id="env-copy">Copiar enlace de la web</button>
+      <a class="bm" id="env-open" href="#" hidden>Abrir esta web en Safari</a>
+      <button type="button" class="open-ig" id="env-copy">Copiar enlace de la web</button>
     </div>
     <ol class="fast-steps ios-steps" id="fast-ios" hidden>
       <li id="ios-step-install">
@@ -286,8 +287,8 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
       <li>
         <b class="step-title">Entra en Instagram desde Safari</b>
         <span class="step-sub">En Safari, no en la app. Si ya tienes la sesión iniciada en Safari, pasa al paso 3.</span>
-        <a class="open-ig strong" href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener">Abrir Instagram en Safari ↗</a>
-        <small class="muted">¿Se abre la app de Instagram? Vuelve aquí, mantén pulsado el botón y elige <b>Abrir en una pestaña nueva</b>.</small>
+        <a class="open-ig strong" id="ig-open-ios" href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener">Abrir Instagram en Safari ↗</a>
+        <small class="muted">Funciona aunque hayas abierto esta web desde Telegram, WhatsApp o Instagram. ¿Aun así se abre la app de Instagram? Vuelve aquí, mantén pulsado el botón y elige <b>Abrir en una pestaña nueva</b>.</small>
       </li>
       <li>
         <b class="step-title">Pulsa Compartir y elige el atajo</b>
@@ -300,7 +301,7 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
     <details class="ios-help" id="ios-help" hidden>
       <summary>¿Algo no funciona?</summary>
       <p><b>No recuerdo mi contraseña de Instagram.</b> En la pantalla de inicio de sesión pulsa <i>¿Has olvidado tu contraseña?</i> y te llegará un código por SMS o correo. No hace falta salir de Safari.</p>
-      <p><b>Abrí la web desde WhatsApp u otra app.</b> Toca el icono de la brújula o «Abrir en Safari» para abrirla en Safari de verdad. Dentro de otras apps el atajo no funciona.</p>
+      <p><b>No me sale el atajo en Compartir.</b> Mira la barra de arriba: tienes que estar en <b>Safari</b>, no dentro de Telegram, WhatsApp o Instagram. Usa el botón del paso 2, que abre Instagram directamente en Safari.</p>
       <p><b>No veo el atajo en Compartir.</b> Desliza hacia abajo hasta el final de la lista (y fíjalo con <b>Editar acciones…</b> para tenerlo arriba). Si no está, vuelve a pulsar <b>Instalar atajo</b> en el paso 1.</p>
       <p><b>Sale un error de «ejecutar scripts».</b> Ve a Ajustes → Apps → Atajos → Avanzado y activa <b>Permitir ejecutar scripts</b>.</p>
       <p><b>Se queda parado o da error.</b> Espera unos minutos y vuelve a probar. Si sigue igual, usa la pestaña <b>Con archivo</b>: tarda más, pero funciona siempre.</p>
@@ -316,8 +317,8 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
       <li>
         <b class="step-title">Entra en Instagram desde Chrome</b>
         <span class="step-sub">En Chrome, no en la app. Si ya tienes la sesión iniciada en Chrome, pasa al paso 3.</span>
-        <a class="open-ig strong" href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener">Abrir Instagram en Chrome ↗</a>
-        <small class="muted">¿Se abre la app de Instagram? Vuelve aquí, mantén pulsado el botón y elige <b>Abrir en una pestaña nueva</b>.</small>
+        <a class="open-ig strong" id="ig-open-android" href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener">Abrir Instagram en Chrome ↗</a>
+        <small class="muted">Funciona aunque hayas abierto esta web desde Telegram, WhatsApp o Instagram. ¿Aun así se abre la app de Instagram? Vuelve aquí, mantén pulsado el botón y elige <b>Abrir en una pestaña nueva</b>.</small>
       </li>
       <li>
         <b class="step-title">Escribe qnms en la barra de direcciones</b>
@@ -890,6 +891,24 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
   var inApp = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Line\/|Twitter|TikTok|musical_ly|BytedanceWebview|Snapchat|LinkedInApp|Pinterest|; wv\)/.test(ua);
   var iosOther = isIOS && /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|GSA\/|DuckDuckGo|YaBrowser|Brave/.test(ua);
   var androidOther = isAndroid && !inApp && /SamsungBrowser|Firefox|OPR\/|EdgA|YaBrowser|MiuiBrowser|HuaweiBrowser/.test(ua);
+  // Abrir Instagram siempre en Safari/Chrome, aunque esta web esté dentro de Telegram, WhatsApp, Instagram…
+  // iOS 17+ entiende «x-safari-https://» (y así tampoco salta la app de Instagram); en Android, un intent a Chrome.
+  var iosMajor = +((ua.match(/OS (\d+)_/) || [])[1] || 0);
+  var IG_LOGIN = "https://www.instagram.com/accounts/login/";
+  if (isIOS && iosMajor >= 17) {
+    var igIos = $("ig-open-ios");
+    igIos.href = "x-safari-" + IG_LOGIN; igIos.removeAttribute("target");
+    igIos.addEventListener("click", function (e) {
+      // Si el sistema no lo abre (versión antigua o lo bloquea la app), probamos el enlace normal
+      e.preventDefault(); location.href = igIos.href;
+      setTimeout(function () { if (!document.hidden) location.href = IG_LOGIN; }, 1500);
+    });
+  }
+  if (isAndroid) {
+    var igAnd = $("ig-open-android");
+    igAnd.href = "intent://www.instagram.com/accounts/login/#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(IG_LOGIN) + ";end";
+    igAnd.removeAttribute("target");
+  }
   var envWarn = inApp ? ["Estás dentro de otra app", isIOS
       ? "Esta web está abierta dentro de una app (Instagram, TikTok…) y así el atajo no aparece. Toca el menú ••• arriba a la derecha y elige «Abrir en Safari» (o «Abrir en el navegador»), o copia el enlace y pégalo en Safari."
       : "Esta web está abierta dentro de una app (Instagram, TikTok…) y así no funciona. Toca ⋮ arriba a la derecha y elige «Abrir en Chrome», o copia el enlace y pégalo en Chrome."]
@@ -898,6 +917,9 @@ button.bm { border: 0; font: inherit; font-weight: 600; cursor: pointer; }
     : null;
   if (envWarn) {
     $("env-warn").hidden = false; $("env-title").textContent = envWarn[0]; $("env-text").textContent = envWarn[1];
+    var SITE_HOME = "https://davcrelib.github.io/quien-no-me-sigue/";
+    if (isIOS && iosMajor >= 17) { $("env-open").href = "x-safari-" + SITE_HOME; $("env-open").hidden = false; }
+    else if (isAndroid) { $("env-open").href = "intent://davcrelib.github.io/quien-no-me-sigue/#Intent;scheme=https;package=com.android.chrome;end"; $("env-open").textContent = "Abrir esta web en Chrome"; $("env-open").hidden = false; }
     $("env-copy").addEventListener("click", function () {
       var btn = $("env-copy"), url = "https://davcrelib.github.io/quien-no-me-sigue/";
       var ok = function () { flash(btn, "Enlace copiado ✓", "Copiar enlace de la web"); };
