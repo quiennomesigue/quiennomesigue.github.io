@@ -8,17 +8,20 @@
   var SITE_ORIGIN = new URL(SITE).origin;
   var APP_ID = "936619743392459";
   if (window.__qnms) { window.__qnms.show(); return; }
+  var IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+  var AGAIN = IOS ? "vuelve a pulsar Compartir → «¿Quién no me sigue?»" : "vuelve a pulsar el marcador «¿Quién no me sigue?»";
   if (!/(^|\.)instagram\.com$/.test(location.hostname)) {
-    alert("Abre instagram.com, inicia sesión y vuelve a pulsar el marcador «¿Quién no me sigue?».");
+    alert("Esto funciona en instagram.com. Te llevamos allí: inicia sesión y " + AGAIN + ".");
     location.href = "https://www.instagram.com/";
     return;
   }
+  var old = document.querySelector("[data-qnms-box]"); if (old) old.remove();
   var m = document.cookie.match(/(?:^|;\s*)ds_user_id=(\d+)/);
-  if (!m) { alert("Inicia sesión en instagram.com y vuelve a pulsar el marcador."); return; }
-  var uid = m[1];
+  var uid = m ? m[1] : "";
 
   /* ---------- Panel ---------- */
   var box = document.createElement("div");
+  box.setAttribute("data-qnms-box", "");
   box.style.cssText = "position:fixed;z-index:2147483647;right:20px;bottom:20px;width:340px;max-width:calc(100vw - 40px);background:#fff;color:#12131a;border-radius:18px;box-shadow:0 20px 60px -10px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.06);font:15px/1.5 -apple-system,system-ui,'Segoe UI',sans-serif;padding:20px;";
   /* DOM construido a mano: instagram.com puede exigir Trusted Types y bloquear innerHTML */
   function h(tag, css, attrs, kids) {
@@ -37,6 +40,10 @@
   box.appendChild(h("div", "height:6px;border-radius:6px;background:#eef0f7;overflow:hidden", {}, [
     h("i", "display:block;height:100%;width:2%;background:linear-gradient(90deg,#3b5bfd,#f0386b);transition:width .4s", { "data-bar": "" })
   ]));
+  box.appendChild(h("p", "margin:10px 0 0;font-size:13px;font-weight:600;color:#12131a", { "data-wait": "" }, ["No cierres esta página ni cambies de app hasta que termine."]));
+  box.appendChild(h("div", "display:none;margin-top:14px;flex-direction:column;gap:8px", { "data-login": "" }, [
+    h("button", BTN + "background:#12131a;color:#fff;border-radius:999px;padding:11px 16px;font-weight:600", { "data-go": "" }, ["Iniciar sesión"])
+  ]));
   box.appendChild(h("div", "display:none;margin-top:14px;flex-direction:column;gap:8px", { "data-done": "" }, [
     h("button", BTN + "background:#12131a;color:#fff;border-radius:999px;padding:11px 16px;font-weight:600", { "data-open": "" }, ["Ver resultados"]),
     h("button", BTN + "color:#646a7e;text-decoration:underline;font-size:13px", { "data-save": "" }, ["Descargar archivo (si no se abren)"])
@@ -45,10 +52,18 @@
   document.body.appendChild(box);
   var $ = function (k) { return box.querySelector("[data-" + k + "]"); };
   var stopped = false;
-  window.__qnms = { show: function () { box.style.display = "block"; } };
-  $("x").onclick = function () { stopped = true; box.remove(); delete window.__qnms; };
   function msg(t) { $("msg").textContent = t; }
   function bar(p) { $("bar").style.width = Math.max(2, Math.min(100, p)) + "%"; }
+  $("x").onclick = function () { stopped = true; box.remove(); delete window.__qnms; };
+  if (!uid) {
+    // Sin sesión: lo explicamos en el panel en vez de un aviso del navegador
+    msg("Primero inicia sesión en Instagram aquí, en " + (IOS ? "Safari" : "este navegador") + ". Cuando veas tu inicio, " + AGAIN + ".");
+    $("bar").parentNode.style.display = "none"; $("wait").style.display = "none";
+    $("login").style.display = "flex";
+    $("go").onclick = function () { location.href = "https://www.instagram.com/accounts/login/"; };
+    return;
+  }
+  window.__qnms = { show: function () { box.style.display = "block"; } };
 
   /* ---------- Lectura ---------- */
   var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
@@ -61,7 +76,17 @@
   // retries: cuántas veces esperar y reintentar si Instagram pide ir más despacio (429) o falla (5xx)
   async function getJSON(url, retries, step) {
     for (var attempt = 0; ; attempt++) {
-      var res = await fetch(url, { credentials: "include", headers: headers() });
+      var res;
+      try { res = await fetch(url, { credentials: "include", headers: headers() }); }
+      catch (netErr) {
+        // Fallo de red (p. ej. al cambiar de app en el móvil): esperamos a que vuelva y reintentamos
+        if (attempt >= 4) throw fail("No hay conexión con Instagram (" + step + "). Revisa tu conexión y vuelve a probar.", -1);
+        msg("Se ha cortado la conexión. Vuelve a esta página para continuar…");
+        while (document.hidden && !stopped) await sleep(500);
+        if (stopped) throw fail("stop", 0);
+        await sleep(1500);
+        continue;
+      }
       if (res.ok) {
         var data = await res.json().catch(function () { return null; });
         if (data && data.status !== "fail") return data;
@@ -103,7 +128,7 @@
       try { r = await fetcher(kind, cursor, step); }
       catch (e) {
         // Si la API v1 falla en la primera página (no por límite de velocidad), probamos GraphQL
-        if (fetcher === pageV1 && page === 0 && e.status !== 0 && e.status !== 429) { fetcher = pageGQL; r = await fetcher(kind, cursor, step); }
+        if (fetcher === pageV1 && page === 0 && e.status !== 0 && e.status !== -1 && e.status !== 429) { fetcher = pageGQL; r = await fetcher(kind, cursor, step); }
         else throw e;
       }
       r.users.forEach(function (u) { if (u && u.u) out.push({ u: String(u.u).toLowerCase(), n: u.n || "" }); });
@@ -132,13 +157,14 @@
       var notBack = following.filter(function (x) { return !fset[x.u]; }).length;
       result = { qnms: 1, source: "rapido", account: total.username || "", date: Date.now(), followers: followers, following: following };
       msg("Listo: " + notBack.toLocaleString("es") + " cuentas no te siguen de vuelta (de " + following.length.toLocaleString("es") + " que sigues).");
-      $("done").style.display = "flex";
+      $("done").style.display = "flex"; $("wait").style.display = "none";
     } catch (e) {
       if (e.message === "stop") return;
+      $("wait").style.display = "none";
       msg(e.status === 429
         ? "Instagram está limitando las peticiones de tu cuenta ahora mismo. Espera unos minutos y vuelve a probar, o usa la opción con archivo."
         : e.status === 401 || e.status === 403
-          ? "Instagram no permite leer la lista. Comprueba que has iniciado sesión en instagram.com y vuelve a probar."
+          ? "Instagram no permite leer la lista. Comprueba que has iniciado sesión en instagram.com y " + AGAIN + "."
           : e.message + " Haz una captura y pásasela al creador de la web.");
     }
   })();
