@@ -27,6 +27,6 @@ Ajustes → Apps → Atajos → Avanzado → activa **Permitir ejecutar scripts*
 
 ## 4. Compartirlo
 
-En la app Atajos, mantén pulsado el atajo → **Compartir** → **Copiar enlace de iCloud**. Ese enlace (actual: https://www.icloud.com/shortcuts/47d36a72fa5b44d286fad3d7fc3a7e5b) va en `SHORTCUT_URL` dentro de `index.html`, y la web mostrará el botón «Instalar atajo» a los usuarios de iPhone.
+En la app Atajos, mantén pulsado el atajo → **Compartir** → **Copiar enlace de iCloud**. Ese enlace (actual: https://www.icloud.com/shortcuts/015f13ff6623472b84a6b67bdef2c5c0) va en `SHORTCUT_URL` dentro de `index.html`, y la web mostrará el botón «Instalar atajo» a los usuarios de iPhone.
 
 `src/atajo.js` se genera con `node scripts/build.js` a partir de `src/bookmarklet.js`. Si cambia, hay que actualizar el código en el atajo y volver a compartir el enlace.
