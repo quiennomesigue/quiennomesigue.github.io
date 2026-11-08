@@ -38,5 +38,6 @@ Lee tus listas desde tu propia sesión, despacio y solo en lectura (nunca sigue 
 - La web no tiene servidor: en modo rápido los datos van directamente de tu pestaña de Instagram a la de la web.
 - Todo el archivo se procesa en tu navegador; no hay servidor ni base de datos.
 - Para detectar quién te deja de seguir se guarda un resumen solo en tu navegador (puedes borrarlo desde la propia web).
+- La página tiene un contador de visitas anónimo ([GoatCounter](https://www.goatcounter.com/)): sin cookies ni datos personales, y nunca recibe datos de Instagram.
 
 Proyecto sin ánimo de lucro. No está afiliado a Instagram ni a Meta.
