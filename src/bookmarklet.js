@@ -119,11 +119,18 @@
     return { users: (edge.edges || []).map(function (e) { return { u: e.node.username, n: e.node.full_name }; }), next: edge.page_info && edge.page_info.has_next_page ? edge.page_info.end_cursor : "" };
   }
 
-  var total = {};
-  async function readList(kind, label, base, offset) {
+  var total = {}, got = { following: 0, followers: 0 }, failed = false;
+  function progress() {
+    // Las dos listas se leen a la vez: la barra y el texto muestran ambas
+    var part = function (k) { return total[k] ? Math.min(1, got[k] / Math.max(1, total[k])) : (got[k] ? 0.5 : 0); };
+    bar(4 + 92 * (part("following") + part("followers")) / 2);
+    var fmt = function (k) { return got[k].toLocaleString("es") + (total[k] ? " de " + total[k].toLocaleString("es") : ""); };
+    msg("Leyendo… sigues: " + fmt("following") + " · seguidores: " + fmt("followers"));
+  }
+  async function readList(kind, label) {
     var out = [], cursor = "", page = 0, fetcher = pageV1, step = label;
     do {
-      if (stopped) throw fail("stop", 0);
+      if (stopped || failed) throw fail("stop", 0);
       var r;
       try { r = await fetcher(kind, cursor, step); }
       catch (e) {
@@ -133,10 +140,9 @@
       }
       r.users.forEach(function (u) { if (u && u.u) out.push({ u: String(u.u).toLowerCase(), n: u.n || "" }); });
       cursor = r.next; page++;
-      var expected = total[kind] || out.length + (cursor ? 50 : 0);
-      msg("Leyendo " + label + "… " + out.length.toLocaleString("es") + (total[kind] ? " de " + total[kind].toLocaleString("es") : ""));
-      bar(offset + base * Math.min(1, out.length / Math.max(1, expected)));
-      if (cursor) await sleep(1200 + Math.random() * 1200 + (page % 8 === 0 ? 5000 : 0));
+      got[kind] = out.length; progress();
+      // Pausa corta entre páginas y algo más larga cada 10 para no saturar
+      if (cursor) await sleep(500 + Math.random() * 500 + (page % 10 === 0 ? 3000 : 0));
     } while (cursor);
     return out;
   }
@@ -145,13 +151,15 @@
   (async function () {
     try {
       msg("Conectando con tu cuenta…");
-      try {
-        // Solo para mostrar el progreso: un intento, sin reintentos
-        var info = await getJSON("/api/v1/users/" + uid + "/info/", 0, "perfil");
-        if (info && info.user) { total.followers = info.user.follower_count; total.following = info.user.following_count; total.username = info.user.username; }
-      } catch (e) { /* sin totales: seguimos igualmente */ }
-      var following = await readList("following", "a quién sigues", 50, 0);
-      var followers = await readList("followers", "tus seguidores", 50, 50);
+      // Solo para mostrar el progreso: un intento, sin reintentos y sin esperar a que termine
+      getJSON("/api/v1/users/" + uid + "/info/", 0, "perfil").then(function (info) {
+        if (info && info.user) { total.followers = info.user.follower_count; total.following = info.user.following_count; total.username = info.user.username; progress(); }
+      }, function () { /* sin totales: seguimos igualmente */ });
+      var lists = await Promise.all([
+        readList("following", "a quién sigues"),
+        readList("followers", "tus seguidores")
+      ]).catch(function (e) { failed = true; throw e; });
+      var following = lists[0], followers = lists[1];
       bar(100);
       var fset = {}; followers.forEach(function (x) { fset[x.u] = 1; });
       var notBack = following.filter(function (x) { return !fset[x.u]; }).length;
