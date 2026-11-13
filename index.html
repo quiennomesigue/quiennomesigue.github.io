@@ -4,6 +4,7 @@
 <link rel="canonical" href="https://quiennomesigue.github.io/">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Descubre quién no te sigue de vuelta en Instagram y quién te ha dejado de seguir. Gratis, sin contraseñas: tus datos no salen de tu navegador.">
+<meta name="author" content="David Creus">
 <meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
@@ -19,7 +20,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="¿Quién no me sigue? Diagrama de quién te sigue, mutuos y quién no te sigue.">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "¿Quién no me sigue?", "url": "https://quiennomesigue.github.io/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "iOS, Android, Windows, macOS", "inLanguage": "es", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "description": "Descubre quién no te sigue de vuelta en Instagram y quién te ha dejado de seguir. Gratis y sin contraseña."}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cómo puedo ver quién no me sigue en Instagram?", "acceptedAnswer": {"@type": "Answer", "text": "Entra en quiennomesigue.github.io desde el navegador de tu móvil u ordenador y sigue los pasos del modo rápido (1 minuto) o sube el archivo oficial de datos que te da Instagram. Verás la lista de cuentas que sigues y que no te siguen de vuelta."}}, {"@type": "Question", "name": "¿Hace falta dar mi contraseña?", "acceptedAnswer": {"@type": "Answer", "text": "No. La herramienta nunca pide tu usuario ni tu contraseña. Usa tu propia sesión de Instagram en el navegador o el archivo oficial de exportación."}}, {"@type": "Question", "name": "¿Es gratis?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, es totalmente gratis, sin anuncios ni registro."}}, {"@type": "Question", "name": "¿Puedo saber quién me ha dejado de seguir?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Cada análisis se guarda en tu navegador y, la próxima vez que analices tu cuenta, te mostramos quién te ha dejado de seguir y quién te ha empezado a seguir."}}, {"@type": "Question", "name": "¿Mis datos se envían a algún servidor?", "acceptedAnswer": {"@type": "Answer", "text": "No. Todo se procesa dentro de tu navegador y nada de tu cuenta llega a ningún servidor."}}]}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "¿Quién no me sigue?", "url": "https://quiennomesigue.github.io/", "applicationCategory": "UtilitiesApplication", "author": {"@type": "Person", "name": "David Creus"}, "operatingSystem": "iOS, Android, Windows, macOS", "inLanguage": "es", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "description": "Descubre quién no te sigue de vuelta en Instagram y quién te ha dejado de seguir. Gratis y sin contraseña."}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cómo puedo ver quién no me sigue en Instagram?", "acceptedAnswer": {"@type": "Answer", "text": "Entra en quiennomesigue.github.io desde el navegador de tu móvil u ordenador y sigue los pasos del modo rápido (1 minuto) o sube el archivo oficial de datos que te da Instagram. Verás la lista de cuentas que sigues y que no te siguen de vuelta."}}, {"@type": "Question", "name": "¿Hace falta dar mi contraseña?", "acceptedAnswer": {"@type": "Answer", "text": "No. La herramienta nunca pide tu usuario ni tu contraseña. Usa tu propia sesión de Instagram en el navegador o el archivo oficial de exportación."}}, {"@type": "Question", "name": "¿Es gratis?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, es totalmente gratis, sin anuncios ni registro."}}, {"@type": "Question", "name": "¿Puedo saber quién me ha dejado de seguir?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Cada análisis se guarda en tu navegador y, la próxima vez que analices tu cuenta, te mostramos quién te ha dejado de seguir y quién te ha empezado a seguir."}}, {"@type": "Question", "name": "¿Mis datos se envían a algún servidor?", "acceptedAnswer": {"@type": "Answer", "text": "No. Todo se procesa dentro de tu navegador y nada de tu cuenta llega a ningún servidor."}}]}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -243,6 +244,14 @@ details p b { color: var(--ink); font-weight: 600; }
 .guide ol li::before { content: counter(g, decimal-leading-zero); font-family: var(--mono); font-size: 0.78rem; font-weight: 500; color: var(--ink); }
 .path { font-weight: 600; color: var(--ink); }
 .tip { font-size: 0.9rem; color: var(--muted); }
+.byline { display: flex; align-items: center; gap: 14px; align-self: flex-start; max-width: 100%; padding: 10px 18px 10px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
+.byline-av { flex: none; width: 44px; height: 44px; border-radius: 50%; padding: 2px; background: var(--grad); }
+.byline-av span { display: grid; place-items: center; width: 100%; height: 100%; border-radius: 50%; background: var(--surface); color: var(--ink); font-weight: 700; font-size: 0.95rem; letter-spacing: -0.02em; }
+.byline-txt { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+.byline-txt small { font-family: var(--mono); font-size: 0.7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.byline-txt b { font-size: 1rem; font-weight: 600; color: var(--ink); }
+.byline-txt em { font-style: normal; font-size: 0.82rem; color: var(--muted); }
+.made-by b { color: var(--ink); font-weight: 600; }
 .guide a { overflow-wrap: anywhere; }
 .faq-sec { display: flex; flex-direction: column; gap: 24px; scroll-margin-top: 16px; }
 .faq { border-bottom: 1px solid var(--line); }
@@ -521,6 +530,14 @@ footer { display: flex; flex-direction: column; align-items: center; gap: 12px; 
       <h2 id="guide-title">Cómo pedir tu archivo a Instagram</h2>
       <p>Es la forma oficial y sin riesgo. Si eliges solo «Seguidores y seguidos», suele estar listo en pocos minutos.</p>
     </div>
+    <div class="byline" itemscope itemtype="https://schema.org/Person">
+      <div class="byline-av" aria-hidden="true"><span>DC</span></div>
+      <div class="byline-txt">
+        <small>Guía hecha por</small>
+        <b itemprop="name">David Creus</b>
+        <em>Creador de «¿Quién no me sigue?»</em>
+      </div>
+    </div>
     <ol>
       <li><span>Abre Instagram y ve a tu <span class="path">Perfil → menú ☰ → Centro de cuentas</span>.</span></li>
       <li><span>Entra en <span class="path">Tu información y permisos → Exportar tu información</span> (a veces se llama <span class="path">Descargar tu información</span>).</span></li>
@@ -568,6 +585,7 @@ footer { display: flex; flex-direction: column; align-items: center; gap: 12px; 
 
   <footer>
     <svg viewBox="0 0 30 20" width="30" height="20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#3d5afe" stroke-width="2.2"/><circle cx="20" cy="10" r="8.5" fill="none" stroke="#ff2e6e" stroke-width="2.2"/></svg>
+    <span class="made-by">Hecho por <b>David Creus</b>.</span>
     <span>Gratis y sin ánimo de lucro. No afiliado a Instagram ni a Meta.</span>
   </footer>
 </div>
